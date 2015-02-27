@@ -111,7 +111,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	{
 		$this->options['PDO::ATTR_ERRMODE'] = PDO::ERRMODE_SILENT;
 		$this->options['PDO::ATTR_PERSISTENT'] = TRUE;
-	
+
 		return new PDO($this->hostname, $this->username, $this->password, $this->options);
 	}
 
@@ -197,11 +197,13 @@ class CI_DB_pdo_driver extends CI_DB {
 			if (is_numeric(stripos($sql, 'SELECT')))
 			{
 				$this->affect_rows = count($result_id->fetchAll());
+				$result_id->execute();
 			}
 			else
 			{
 				$this->affect_rows = $result_id->rowCount();
 			}
+			$result = $result_id;
 		}
 		else
 		{
@@ -209,7 +211,7 @@ class CI_DB_pdo_driver extends CI_DB {
 			return FALSE;
 		}
 
-		return $result_id;
+		return $result;
 	}
 
 	// --------------------------------------------------------------------
@@ -328,16 +330,16 @@ class CI_DB_pdo_driver extends CI_DB {
 
 			return $str;
 		}
-		
+
 		//Escape the string
 		$str = $this->conn_id->quote($str);
-		
+
 		//If there are duplicated quotes, trim them away
 		if (strpos($str, "'") === 0)
 		{
 			$str = substr($str, 1, -1);
 		}
-		
+
 		// escape LIKE condition wildcards
 		if ($like === TRUE)
 		{
@@ -366,7 +368,7 @@ class CI_DB_pdo_driver extends CI_DB {
 
 	/**
 	 * Insert ID
-	 * 
+	 *
 	 * @access	public
 	 * @return	integer
 	 */
@@ -539,7 +541,7 @@ class CI_DB_pdo_driver extends CI_DB {
 		if (strpos($item, '.') !== FALSE)
 		{
 			$str = $this->_escape_char.str_replace('.', $this->_escape_char.'.'.$this->_escape_char, $item).$this->_escape_char;
-			
+
 		}
 		else
 		{
@@ -589,7 +591,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	{
 		return "INSERT INTO ".$table." (".implode(', ', $keys).") VALUES (".implode(', ', $values).")";
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -642,7 +644,7 @@ class CI_DB_pdo_driver extends CI_DB {
 
 		return $sql;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -784,7 +786,7 @@ class CI_DB_pdo_driver extends CI_DB {
 			{
 				$sql .= " OFFSET ".$offset;
 			}
-			
+
 			return $sql;
 		}
 	}

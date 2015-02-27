@@ -3,12 +3,12 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
+$db['default']['hostname'] = 'mysql:host=localhost';
 $db['default']['username'] = 'root';
 $db['default']['password'] = '1234';
 $db['default']['database'] = 'gnssm';
 $db['default']['port']='3306';
-$db['default']['dbdriver'] = 'MySQL';
+$db['default']['dbdriver'] = 'pdo';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
