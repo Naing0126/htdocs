@@ -3,11 +3,11 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'mysql:host=localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '1234';
-$db['default']['database'] = 'gnssm';
-$db['default']['port']='3306';
+$db['default']['hostname'] = 'mysql:host=x0244r5xx0.database.windows.net';
+$db['default']['username'] = 'naing';
+$db['default']['password'] = '@Sigkgk2013';
+$db['default']['database'] = 'NaingDB';
+$db['default']['port']='1433';
 $db['default']['dbdriver'] = 'pdo';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
