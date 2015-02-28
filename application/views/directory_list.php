@@ -15,7 +15,6 @@
    <link href="/assets/css/dashboard.css" rel="stylesheet">
    <link href="/assets/css/horizontal.css" rel="stylesheet" >
 
-   <script src="http://darsa.in/sly/js/vendor/modernizr.js"></script>
    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
 
