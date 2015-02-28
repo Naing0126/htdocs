@@ -24,53 +24,50 @@ public function getDate($widgets_sid){
   for($i=0;$i<$cnt;$i++){
      $sid = $widgets_sid[$i];
 
-  $this->db->select(' * ');
-    $this->db->from('data');
-    $this->db->where('data_sid',$sid);
-    $query = $this->db->get()->result();
-    $data['cnt'][$sid] = count($query);
-    for($i=0;$i<count($query);$i++){
-        $data[$sid][$i] = $query[$i]->data_date;
+      $this->db->select(' * ');
+      $this->db->from('data');
+      $this->db->where('data_sid',$sid);
+      $query = $this->db->get()->result();
+      $data['cnt'][$sid] = count($query);
+      for($j=0;$j<count($query);$j++){
+        $data[$sid][$j]=$query[$j]->data_date;
       }
-      return $data;
-    }
+  }
+   return $data;
 }
 
 public function getValue($widgets_sid){
    $cnt = count($widgets_sid);
-  for($i=0;$i<$cnt;$i++){
+ for($i=0;$i<$cnt;$i++){
      $sid = $widgets_sid[$i];
 
-    $this->db->select(' * ');
-    $this->db->from('data');
-    $this->db->where('data_sid',$sid);
-    $query = $this->db->get()->result();
-    $data['cnt'][$sid] = count($query);
-    for($i=0;$i<count($query);$i++){
-        $data[$sid][$i] = $query[$i]->data_value;
+      $this->db->select(' * ');
+      $this->db->from('data');
+      $this->db->where('data_sid',$sid);
+      $query = $this->db->get()->result();
+      $data['cnt'][$sid] = count($query);
+      for($j=0;$j<count($query);$j++){
+        $data[$sid][$j]=$query[$j]->data_value;
       }
-      return $data;
-    }
+  }
+   return $data;
 }
 
 public function getTime($widgets){
+ $cnt = count($widgets_sid);
+ for($i=0;$i<$cnt;$i++){
+     $sid = $widgets_sid[$i];
 
-  foreach($widgets as $w ){
-    $widget_id = $w->widget_id;
-    $sid = $w->sid;
-
-    $this->db->select(' * ');
-    $this->db->from('data');
-    $this->db->where('data_sid',$sid);
-    $query = $this->db->get();
-    if($query->num_rows() > 0){
-      $data['cnt'][] = $query->num_rows();
-      foreach($query->result() as $v){
-        $data[$widget_id][] = $v->data_time;
+      $this->db->select(' * ');
+      $this->db->from('data');
+      $this->db->where('data_sid',$sid);
+      $query = $this->db->get()->result();
+      $data['cnt'][$sid] = count($query);
+      for($j=0;$j<count($query);$j++){
+        $data[$sid][$j]=$query[$j]->data_value;
       }
-      return $data;
-    }
   }
+   return $data;
 }
 
 function new_widget($data){
