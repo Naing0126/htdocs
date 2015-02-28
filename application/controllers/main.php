@@ -14,7 +14,7 @@ class Main extends CI_Controller {
         $this->load->library('session');
 
         // Load database
-       //$this->load->model('user_model');
+       $this->load->model('user_model');
     }
 
     function index(){
