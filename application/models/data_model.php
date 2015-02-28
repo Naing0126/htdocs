@@ -64,7 +64,7 @@ public function getTime($widgets){
       $query = $this->db->get()->result();
       $data['cnt'][$sid] = count($query);
       for($j=0;$j<count($query);$j++){
-        $data[$sid][$j]=$query[$j]->data_value;
+        $data[$sid][$j]=$query[$j]->data_time;
       }
   }
    return $data;

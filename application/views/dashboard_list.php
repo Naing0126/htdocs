@@ -178,7 +178,7 @@
                 $date = $data_date[$sid][$i];
                 $value = $data_value[$sid][$i];
                 ?>
-                 var date = <?=$date?>;
+                 var date = '<?=$date?>';
                  var value = <?=$value?>;
                  alert(date);
                 dataChart.addData([value],date);
