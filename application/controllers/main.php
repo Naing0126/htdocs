@@ -19,9 +19,9 @@ class Main extends CI_Controller {
 
     function index(){
        //$this->load->view('welcome_message');
-        //$this->load->view('main_head');
+        $this->load->view('main_head');
         $this->load->view('main_content');
-        //$this->load->view('main_footer');
+        $this->load->view('main_footer');
     }
     function get($id){
         $topics = $this->topic_model->gets();
