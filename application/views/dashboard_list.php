@@ -180,6 +180,7 @@
                 ?>
                  var date = <?=$date?>;
                  var value = <?=$value?>;
+                 alert(date);
                 dataChart.addData([value],date);
 
                 <?php
@@ -312,7 +313,7 @@ function connectSensor(){
                     var datas = document.getElementById('canvas'+widget_id).getContext('2d');
                 var dataChart = new Chart(datas).Line(testData);
                 var i;
-                for(i=1;i<updated_widget.cnt;i++){
+                for(i=0;i<updated_widget.cnt;i++){
                   dataChart.addData([updated_widget.data_value[i]],updated_widget.data_date[i]);
                 }
 

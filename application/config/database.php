@@ -7,7 +7,6 @@ $db['default']['hostname'] = 'mysql:host=ja-cdbr-azure-west-a.cloudapp.net';
 $db['default']['username'] = 'b7f51aceb56551';
 $db['default']['password'] = '1eb37f2f';
 $db['default']['database'] = 'naingteAwFvNFAtW';
-
 $db['default']['dbdriver'] = 'pdo';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
