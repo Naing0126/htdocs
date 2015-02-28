@@ -31,7 +31,7 @@ public function getDate($widgets_sid){
     if($query->num_rows() > 0){
       $data['cnt'][$sid] = $query->num_rows;
       foreach($query->result() as $v){
-        $data[$sid][] = $v->data_value;
+        $data[$sid][] = ""+$v->data_date;
       }
       return $data;
     }
