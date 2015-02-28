@@ -34,7 +34,7 @@
 
 <body>
 
-<h1>Register here!</h1>
+<h1>등록하쇼!</h1>
 
 <p>Fill in your name and email address, then click <strong>Submit</strong> to register.</p>
 
