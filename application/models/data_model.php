@@ -24,18 +24,16 @@ public function getDate($widgets_sid){
   for($i=0;$i<$cnt;$i++){
      $sid = $widgets_sid[$i];
 
-    $this->db->select(' * ');
+  $this->db->select(' * ');
     $this->db->from('data');
     $this->db->where('data_sid',$sid);
-    $query = $this->db->get();
-    if($query->num_rows() > 0){
-      $data['cnt'][$sid] = $query->num_rows;
-      foreach($query->result() as $v){
-        $data[$sid][] = ""+$v->data_date;
+    $query = $this->db->get()->result();
+    $data['cnt'][$sid] = count($query);
+    for($i=0;$i<count($query);$i++){
+        $data[$sid][$i] = $query[$i]->data_date;
       }
       return $data;
     }
-  }
 }
 
 public function getValue($widgets_sid){
@@ -46,15 +44,13 @@ public function getValue($widgets_sid){
     $this->db->select(' * ');
     $this->db->from('data');
     $this->db->where('data_sid',$sid);
-    $query = $this->db->get();
-    if($query->num_rows() > 0){
-      $data['cnt'][$sid] = $query->num_rows;
-      foreach($query->result() as $v){
-        $data[$sid][] = $v->data_value;
+    $query = $this->db->get()->result();
+    $data['cnt'][$sid] = count($query);
+    for($i=0;$i<count($query);$i++){
+        $data[$sid][$i] = $query[$i]->data_value;
       }
       return $data;
     }
-  }
 }
 
 public function getTime($widgets){
