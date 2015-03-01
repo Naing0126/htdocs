@@ -218,5 +218,25 @@ public function logout() {
     $this->load->helper('url');
     redirect('main');
 }
+
+function get_directories($uid){
+ header('Content-Type: application/json; charset=utf-8');
+  echo(json_encode($this->directory_model->gets($uid)));
+ exit;
+}
+
+function get_included_sensors_in_directory($did){
+ header('Content-Type: application/json; charset=utf-8');
+ echo(json_encode($this->include_model->get_included_sensors($did)));
+ exit;
+}
+
+function get_included_sensors_in_dashboard($uid){
+ header('Content-Type: application/json; charset=utf-8');
+ echo(json_encode($this->dashboard_model->get_included_sensors($uid)));
+ exit;
+}
+
+
 }
 ?>

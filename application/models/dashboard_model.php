@@ -155,4 +155,52 @@ function delete_widget($data) {
 }
 }
 
+public function get_included_sensors($uid){
+ $this->db->select('*');
+ $this->db->from('dashboard');
+ $this->db->join('sensor','sensor.sid = dashboard.sensor_id');
+ $this->db->where('dashboard_id',$uid);
+ $query = $this->db->get();
+ if($query->num_rows() > 0){
+   $cnt = 0;
+   foreach($query->result() as $v){
+
+     $data['info']['sensor_model'][]= $v->sensor_model;
+     $data['info']['sensor_type'][]= $v->sensor_type;
+     $data['info']['sensor_gid'][]= $v->sensor_gid;
+
+     $this->db->select('*');
+     $this->db->where('data_sid',$v->sid);
+     $this->db->from('data');
+     $this->db->order_by('data_id', 'DESC');
+     $this->db->limit(1);
+     $temp = $this->db->get();
+     if($temp->num_rows() == 0){
+         $data['info']['recent_data'][]= 'null';
+     }
+     foreach($temp->result() as $t){
+      $data['info']['recent_data'][]= $t->data_value;
+    }
+
+     $this->db->select('*');
+     $this->db->where('data_sid',$v->sid);
+     $this->db->from('data');
+     $temp2 = $this->db->get();
+     if($temp2->num_rows() == 0){
+         $data['data'][$cnt]= 'null';
+     }
+     foreach($temp2->result() as $t){
+      $data['data'][$cnt]['data_date'][]= $t->data_date;
+      $data['data'][$cnt]['data_time'][]= $t->data_time;
+      $data['data'][$cnt]['data_value'][]= $t->data_value;
+    }
+
+    $data['index'][$v->widget_id] = $cnt;
+
+    $cnt++;
+  }
+  return $data;
+}
+}
+
 }

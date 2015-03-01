@@ -95,7 +95,12 @@
   </div><!-- /modal-dialog -->
 </div><!-- /modal -->
 
-<body id="dashboard">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+   <script src="/assets/js/angular_core.js"></script>
+<?php
+$base_url = site_url('');
+?>
+<body id="dashboard" ng-app='angular' ng-controller='dashboardCtrl' ng-init="init('<?=$uid?>','<?=$base_url?>')">
 
  <div id="main-stack" class="grid-stack" data-gs-width="12" align="center">
    <?php
@@ -127,17 +132,28 @@
             <button id="<?=$sid?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
               <span class="glyphicon glyphicon-minus-sign"></span>
             </button>
-            <div class="name"><?=$widget_type?> - <?=$sensor_model?></div>
+            <div class="name"><?=$widget_type?> - {{widgets.info.sensor_model[widgets.index[<?=$widget_id?>]]}}</div>
           </div>
           <div class="widget-content">
            <div class="type">
             <?=$type?>
           </div>
           <div class="value">
-            23
+            {{widgets.info.recent_data[widgets.index[<?=$widget_id?>]]}}
+             <?php
+                    if($type=="temperature"){
+                      ?>
+                      C
+              <?php
+                    }else if($type=="humidity"){
+                  ?>
+                  .
+                  <?php
+                }
+                ?>
           </div>
-          <div class="update">
-            2분 전
+          <div class="gateway">
+            gid : {{widgets.info.sensor_gid[widgets.index[<?=$widget_id?>]]}}
           </div>
         </div><!-- /sensor-content -->
       </div><!-- /sensor-item-content -->
@@ -152,7 +168,7 @@
           <button id="<?=$sid?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
             <span class="glyphicon glyphicon-minus-sign"></span>
           </button>
-          <div class="name"><?=$widget_type?> - <?=$sensor_model?></div>
+          <div class="name"><?=$widget_type?> - {{widgets.info.sensor_model[widgets.index[<?=$widget_id?>]]}}</div>
         </div>
         <div class="widget-content chart" align="center">
           <canvas  class="col-lg-11 col-sm-11" id="canvas<?=$widget_id?>" width="95%" height="15%"></canvas>
@@ -180,7 +196,6 @@
                 ?>
                  var date = '<?=$date?>';
                  var value = <?=$value?>;
-                 alert(date);
                 dataChart.addData([value],date);
 
                 <?php
@@ -313,7 +328,7 @@ function connectSensor(){
                     var datas = document.getElementById('canvas'+widget_id).getContext('2d');
                 var dataChart = new Chart(datas).Line(testData);
                 var i;
-                for(i=0;i<updated_widget.cnt;i++){
+                for(i=1;i<updated_widget.cnt;i++){
                   dataChart.addData([updated_widget.data_value[i]],updated_widget.data_date[i]);
                 }
 

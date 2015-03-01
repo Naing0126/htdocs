@@ -50,8 +50,22 @@ class Include_model extends CI_Model{
         $added_sensor['sensor_gid'] = $sensor->sensor_gid;
         $added_sensor['sensor_model'] = $sensor->sensor_model;
         $added_sensor['sensor_type'] = $type;
+
+           $this->db->select('*');
+     $this->db->where('data_sid', $sensor->sid);
+     $this->db->from('data');
+     $this->db->order_by('data_id', 'DESC');
+     $this->db->limit(1);
+     $temp = $this->db->get();
+     if($temp->num_rows() == 0){
+         $added_sensor['recent_data']= 'null';
+     }
+     foreach($temp->result() as $t){
+      $added_sensor['recent_data']= $t->data_value;
+    }
+
       }
-        return $added_sensor;
+      return $added_sensor;
     }
   }
 
@@ -77,5 +91,38 @@ function delete_include($data) {
 }
 }
 
+public function get_included_sensors($did){
+ $this->db->select('*');
+ $this->db->from('include');
+ $this->db->join('sensor','sensor.sid = include.sensor_id');
+ $this->db->where('directory_id',$did);
+ $query = $this->db->get();
+ if($query->num_rows() > 0){
+   $cnt = 0;
+   foreach($query->result() as $v){
 
+     $data['info']['sensor_model'][]= $v->sensor_model;
+     $data['info']['sensor_type'][]= $v->sensor_type;
+     $data['info']['sensor_gid'][]= $v->sensor_gid;
+
+     $this->db->select('*');
+     $this->db->where('data_sid',$v->sid);
+     $this->db->from('data');
+     $this->db->order_by('data_id', 'DESC');
+     $this->db->limit(1);
+     $temp = $this->db->get();
+     if($temp->num_rows() == 0){
+         $data['info']['recent_data'][]= 'null';
+     }
+     foreach($temp->result() as $t){
+      $data['info']['recent_data'][]= $t->data_value;
+    }
+
+    $data['index'][$v->sid] = $cnt;
+
+    $cnt++;
+  }
+  return $data;
+}
+}
 }

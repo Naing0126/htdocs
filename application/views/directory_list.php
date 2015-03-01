@@ -92,7 +92,6 @@
 
       <div class="btn-group">
         <button class="btn btn-default btn-md" data-toggle="modal" data-target="#AddDirectoryModal"><i class="glyphicon glyphicon-plus"></i> Add Directory</button>
-
       </div>
 
       <span class="AddDirectoryModal">
@@ -127,6 +126,8 @@
 </div><!-- /wrap -->
 </div><!-- /sly -->
 </div><!--directory-list-->
+
+
 
 </body>
 

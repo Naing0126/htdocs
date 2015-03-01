@@ -4,8 +4,8 @@ class Sensor_model extends CI_Model{
         parent::__construct();
     }
 
-    public function gets($did){
-     return $this->db->get_where('sensor', array('did'=>$did))->result();
+    public function gets($gid){
+     return $this->db->get_where('sensor', array('sensor_gid'=>$gid))->result();
  }
   function get_included_sensors($gid){
     $this->db->select('sid, sensor_model, sensor_type');

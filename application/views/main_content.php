@@ -1,4 +1,4 @@
-﻿<!-- About Section -->
+<!-- About Section -->
     <section id="about">
         <div class="container">
             <div class="row">

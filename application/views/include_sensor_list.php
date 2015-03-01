@@ -76,6 +76,9 @@ $(document).on("click",".open-updateDirectoryModal",function(){
 
     <script src="/assets/js/bootstrap.min.js" rel="stylesheet"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+   <script src="/assets/js/angular_core.js"></script>
+
     <span class="add-sensor-bundle">
      <!-- Button trigger modal -->
      <button class="btn add-sensor-btn btn-default btn-md" data-toggle="modal" data-target="#selectSensorModal">
@@ -117,8 +120,12 @@ $(document).on("click",".open-updateDirectoryModal",function(){
 </header><!-- /header -->
 </div><!-- /header -->
 
-<body>
+<?php
+$base_url = site_url('');
+?>
+<body ng-app='angular' ng-controller='directoryCtrl' ng-init="init('<?=$did?>','<?=$base_url?>')" >
 
+<!-- load included sensors in directory -->
   <div class="sensor-bundle-list" align="center">
     <?php
  // sensor type 1 : temperature, 2 : humidity
@@ -168,14 +175,25 @@ $(document).on("click",".open-updateDirectoryModal",function(){
                 <button id="<?=$sid?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$type_name?>','<?=$sid?>','<?=$did?>')">
                   <span class="glyphicon glyphicon-minus-sign"></span>
                 </button>
-                <div class="name"><?=$sensor_model?></div>
+                <div class="name">{{sensors.info.sensor_model[sensors.index['<?=$sid?>']]}}</div>
               </div>
               <div class="sensor-content">
                 <div class="value">
-                  23
+                  {{sensors.info.recent_data[sensors.index['<?=$sid?>']]}}
+                  <?php
+                    if($type_name=="temperature"){
+                      ?>
+                      C
+              <?php
+                    }else if($type_name=="humidity"){
+                  ?>
+                  .
+                  <?php
+                }
+                ?>
                 </div>
-                <div class="update">
-                  2분 전
+                <div class="gateway">gid :
+                  {{sensors.info.sensor_gid[sensors.index['<?=$sid?>']]}}
                 </div>
               </div><!-- /sensor-content -->
             </div><!-- /sensor-item-content -->
@@ -245,8 +263,14 @@ $(document).on("click",".open-updateDirectoryModal",function(){
                  element+= "<span class='glyphicon glyphicon-minus-sign'></span></button>";
                  element+= "<div class='name'>"+added_sensor.sensor_model+"</div></div>";
                  element += "<div class='sensor-content'>";
-                 element += "<div class='value'>17 C</div>";
-                 element += "<div class='update'>2시간 전</div>";
+                 element += "<div class='value'>"+added_sensor.recent_data;
+                 if(added_sensor.sensor_type==='temperature'){
+                   element += " C";
+                 }else if(added_sensor.sensor_type==='humidity'){
+                  element += " . ";
+                 }
+                 element += "</div>";
+                 element += "<div class='gateway'>gid : "+added_sensor.sensor_gid+"</div>";
                  element += "</div></div></div><!--sensor-item-->";
 
                  var el = $.parseHTML(element);

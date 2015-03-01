@@ -8,6 +8,23 @@ class Directory_model extends CI_Model{
      return $this->db->get_where('directory', array('directory_uid'=>$uid))->result();
  }
 
+    public function gets_by_did($uid){
+ $this->db->select('*');
+      $this->db->from('directory');
+    $this->db->where('directory_uid',$uid);
+    $query = $this->db->get();
+    if($query->num_rows() > 0){
+         $cnt = 0;
+      foreach($query->result() as $v){
+
+         $data['directory_name'][]= $v->directory_name;
+         $data['index'][$v->did] = $cnt;
+        $cnt++;
+      }
+      return $data;
+    }
+ }
+
   public function getName($did){
     $this->db->select('*');
       $this->db->from('directory');
