@@ -178,7 +178,7 @@ $base_url = site_url('');
     <div id="widget<?=$widget_id?>" class="grid-stack-item" data-gs-x="<?=$x?>" data-gs-y="<?=$y?>" data-gs-width="12" data-gs-height="2" style="margin: 20px;">
       <div class="grid-stack-item-content widget" >
         <div class="widget-name">
-          <button id="<?=$sid?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
+          <button id="<?=$sensor_id?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
             <span class="glyphicon glyphicon-minus-sign"></span>
           </button>
           <div class="name"><?=$widget_type?> - {{widgets.info.sensor_id[widgets.index[<?=$widget_id?>]]}}</div>
