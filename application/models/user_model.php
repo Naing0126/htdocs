@@ -61,6 +61,27 @@ class User_model extends CI_Model{
         }
     }
 
+    public function utc(){
+        $utc = 1425263955;
+        $str = 'test';
+//$query = "INSERT INTO utc (utc) VALUE ($utc,'$str')";
+//$this->db->query($query);
+//$this->db->query('INSERT INTO utc (utc,string) VALUE (1425263953,"test")');
+ //       $this->db->query('INSERT INTO utc (utc,string) VALUE ('+$utc+',"'+$str+'")');
+     /*
+       $this->db->select('utc');
+        $this->db->from('utc');
+        $this->db->order_by('utc', 'DESC');
+     $this->db->limit(1);
+        $query = $this->db->get();
+         $utc2=  $query->result();
+        */
+         $utc = 1425263952;
+         $result = 'test';
+        $result = $this->db->query('SELECT from_unixtime(1425263952)');
+        return $result;
+    }
+
 }
 
 ?>

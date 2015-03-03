@@ -19,52 +19,39 @@ class Data_model extends CI_Model{
   }
 }
 
-public function getDate($widgets_sid){
-  $cnt = count($widgets_sid);
-  for($i=0;$i<$cnt;$i++){
-     $sid = $widgets_sid[$i];
-
-      $this->db->select(' * ');
-      $this->db->from('data');
-      $this->db->where('data_sid',$sid);
-      $query = $this->db->get()->result();
-      $data['cnt'][$sid] = count($query);
-      for($j=0;$j<count($query);$j++){
-        $data[$sid][$j]=$query[$j]->data_date;
-      }
-  }
-   return $data;
-}
-
-public function getValue($widgets_sid){
-   $cnt = count($widgets_sid);
- for($i=0;$i<$cnt;$i++){
-     $sid = $widgets_sid[$i];
-
-      $this->db->select(' * ');
-      $this->db->from('data');
-      $this->db->where('data_sid',$sid);
-      $query = $this->db->get()->result();
-      $data['cnt'][$sid] = count($query);
-      for($j=0;$j<count($query);$j++){
-        $data[$sid][$j]=$query[$j]->data_value;
-      }
-  }
-   return $data;
-}
-
-public function getTime($widgets){
+public function getValue($widgets_sid,$widgets_nid){
  $cnt = count($widgets_sid);
- for($i=0;$i<$cnt;$i++){
-     $sid = $widgets_sid[$i];
+  for($i=0;$i<$cnt;$i++){
+     $sid = $widgets_sid['sensor_id'][$i];
+     $nid = $widgets_nid['sensor_nid'][$i];
 
+     $condition = "data_sid =" . "'" . $sid . "' and data_nid =" . "'" . $nid . "'";
       $this->db->select(' * ');
       $this->db->from('data');
-      $this->db->where('data_sid',$sid);
+      $this->db->where($condition);
       $query = $this->db->get()->result();
-      $data['cnt'][$sid] = count($query);
+      $data['cnt'][$sid][$nid] = count($query);
       for($j=0;$j<count($query);$j++){
-        $data[$sid][$j]=$query[$j]->data_time;
+        $data[$sid][$nid][$j]=$query[$j]->data_value;
+      }
+  }
+   return $data;
+}
+
+public function getTime($widgets_sid,$widgets_nid){
+ $cnt = count($widgets_sid);
+  for($i=0;$i<$cnt;$i++){
+    $sid = $widgets_sid['sensor_id'][$i];
+     $nid = $widgets_nid['sensor_nid'][$i];
+
+     $condition = "data_sid =" . "'" . $sid . "' and data_nid =" . "'" . $nid . "'";
+      $this->db->select(' * ');
+      $this->db->from('data');
+      $this->db->where($condition);
+      $query = $this->db->get()->result();
+      $data['cnt'][$sid][$nid] = count($query);
+      for($j=0;$j<count($query);$j++){
+        $data[$sid][$nid][$j]=$query[$j]->data_time;
       }
   }
    return $data;

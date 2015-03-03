@@ -5,20 +5,18 @@ class Dashboard_model extends CI_Model{
   }
 
   public function gets($uid){
-   $this->db->select('widget_id,widget_type,sid,sensor_gid, sensor_model, sensor_type');
+   $this->db->select('widget_id,widget_type,sensor.sensor_id as sid,sensor.sensor_nid as nid, sensor_type');
    $this->db->from('sensor');
-   $this->db->join('dashboard','dashboard.sensor_id = sensor.sid');
+   $this->db->join('dashboard','dashboard.sensor_id = sensor.sensor_id');
    $this->db->where('dashboard.dashboard_id',$uid);
    $query = $this->db->get();
    if($query->num_rows() > 0){
     foreach($query->result() as $v){
       $data['widget_type'][] = $v->widget_type;
       $data['widget_id'][] = $v->widget_id;
-      $data['sid'][] = $v->sid;
-      $data['sensor_gid'][] = $v->sensor_gid;
-      $data['sensor_model'][] = $v->sensor_model;
+      $data['sensor_nid'][] = $v->nid;
+      $data['sensor_id'][] = $v->sid;
       $data['sensor_type'][] = $v->sensor_type;
-
     }
     return $data;
   }
@@ -31,7 +29,20 @@ class Dashboard_model extends CI_Model{
    $query = $this->db->get();
    if($query->num_rows() > 0){
     foreach($query->result() as $v){
-      $data[] = $v->sensor_id;
+      $data['sensor_id'][] = $v->sensor_id;
+    }
+    return $data;
+  }
+}
+
+ public function getWidgetsNid($uid){
+   $this->db->select('sensor_id,sensor_nid');
+   $this->db->from('dashboard');
+   $this->db->where('dashboard.dashboard_id',$uid);
+   $query = $this->db->get();
+   if($query->num_rows() > 0){
+    foreach($query->result() as $v){
+      $data['sensor_nid'][] = $v->sensor_nid;
     }
     return $data;
   }
@@ -75,31 +86,48 @@ function update_widget($data){
   if ($this->db->affected_rows() > 0) {
     $this->db->select(' * ');
     $this->db->from('dashboard');
-    $this->db->join('sensor','dashboard.sensor_id = sensor.sid');
+    $this->db->join('sensor','dashboard.sensor_id = sensor.sensor_id and dashboard.sensor_nid = sensor.sensor_nid');
     $this->db->where('widget_id',$data['widget_id']);
     $this->db->limit(1);
     $query = $this->db->get();
     $updated_widget = array();
     foreach ($query->result() as $widget) {
-      if($widget->sensor_type === '1')
+      if($widget->sensor_type === '0')
         $type = 'temperature';
-      else if($widget->sensor_type === '2')
+      else if($widget->sensor_type === '1')
         $type = 'humidity';
+      else if($widget->sensor_type === '2')
+        $type = 'co2';
+      else if($widget->sensor_type === '3')
+        $type = 'type3';
+
       $updated_widget['widget_type'] = $widget->widget_type;
-      $updated_widget['sid'] = $widget->sid;
-      $updated_widget['sensor_gid'] = $widget->sensor_gid;
-      $updated_widget['sensor_model'] = $widget->sensor_model;
+      $updated_widget['sensor_id'] = $widget->sensor_id;
+      $updated_widget['sensor_nid'] = $widget->sensor_nid;
       $updated_widget['sensor_type'] = $type;
 
       $this->db->select(' * ');
       $this->db->from('data');
-      $this->db->where('data_sid',$widget->sid);
+      $this->db->where('data_sid',$widget->sensor_id);
       $query = $this->db->get()->result();
      $updated_widget['cnt'] = count($query);
      for($i=0;$i<count($query);$i++){
-      $updated_widget['data_date'][$i]=$query[$i]->data_date;
+      $updated_widget['data_time'][$i]=$query[$i]->data_time;
       $updated_widget['data_value'][$i]=$query[$i]->data_value;
      }
+
+      $this->db->select('*');
+     $this->db->where('data_sid',$widget->sensor_id);
+     $this->db->from('data');
+     $this->db->order_by('data_id', 'DESC');
+     $this->db->limit(1);
+     $temp = $this->db->get();
+     if($temp->num_rows() == 0){
+         $updated_widget['recent_data']= 'null';
+     }
+     foreach($temp->result() as $t){
+       $updated_widget['recent_data']= $t->data_value;
+    }
     }
     return $updated_widget;
   }
@@ -158,19 +186,19 @@ function delete_widget($data) {
 public function get_included_sensors($uid){
  $this->db->select('*');
  $this->db->from('dashboard');
- $this->db->join('sensor','sensor.sid = dashboard.sensor_id');
+ $this->db->join('sensor','sensor.sensor_id = dashboard.sensor_id');
  $this->db->where('dashboard_id',$uid);
  $query = $this->db->get();
  if($query->num_rows() > 0){
    $cnt = 0;
    foreach($query->result() as $v){
 
-     $data['info']['sensor_model'][]= $v->sensor_model;
+     $data['info']['sensor_id'][]= $v->sensor_id;
      $data['info']['sensor_type'][]= $v->sensor_type;
-     $data['info']['sensor_gid'][]= $v->sensor_gid;
+     $data['info']['sensor_nid'][]= $v->sensor_nid;
 
      $this->db->select('*');
-     $this->db->where('data_sid',$v->sid);
+     $this->db->where('data_sid',$v->sensor_id);
      $this->db->from('data');
      $this->db->order_by('data_id', 'DESC');
      $this->db->limit(1);
@@ -183,14 +211,13 @@ public function get_included_sensors($uid){
     }
 
      $this->db->select('*');
-     $this->db->where('data_sid',$v->sid);
+     $this->db->where('data_sid',$v->sensor_id);
      $this->db->from('data');
      $temp2 = $this->db->get();
      if($temp2->num_rows() == 0){
          $data['data'][$cnt]= 'null';
      }
      foreach($temp2->result() as $t){
-      $data['data'][$cnt]['data_date'][]= $t->data_date;
       $data['data'][$cnt]['data_time'][]= $t->data_time;
       $data['data'][$cnt]['data_value'][]= $t->data_value;
     }

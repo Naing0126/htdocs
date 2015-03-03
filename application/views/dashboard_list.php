@@ -82,8 +82,8 @@
         Directory에 추가하고자 하는 Sensor를 선택하세요
         <br>
         <input type="hidden" id="widget_id" name="widget_id" value="defalut">
-        <?php $included_sensors['#'] = 'Select Gateway first'; ?>
-        <label for="gateway">Gateway: </label><?php echo form_dropdown('gateway_id', $gateways, '#', 'id="gateway" class="form-control"'); ?>
+        <?php $included_sensors['#'] = 'Select Sensor Node first'; ?>
+        <label for="node">Node: </label><?php echo form_dropdown('node_id', $nodes, '#', 'id="node" class="form-control"'); ?>
         <label for="sensor">Sensor: </label><?php echo form_dropdown('sensor_id', $included_sensors, '#', 'id="included_sensors" class="form-control"'); ?>
 
       </div>
@@ -104,35 +104,40 @@ $base_url = site_url('');
 
  <div id="main-stack" class="grid-stack" data-gs-width="12" align="center">
    <?php
-   foreach($widgets['sensor_gid'] as $k=>$v){
-    $length = count($widgets['sensor_gid']) -1;
+   foreach($widgets['sensor_nid'] as $k=>$v){
+    $length = count($widgets['sensor_nid']) -1;
     $index = $length-$k;
     $widget_id = $widgets['widget_id'][$index];
-    $sid = $widgets['sid'][$index];
-    $sensor_gid = $widgets['sensor_gid'][$index];
-    $sensor_model = $widgets['sensor_model'][$index];
+    $sensor_nid = $widgets['sensor_nid'][$index];
+    $sensor_id = $widgets['sensor_id'][$index];
     $type = $widgets['sensor_type'][$index];
     switch($type){
-      case '1':
+      case '0':
       $type = 'temperature';
       break;
-      case '2':
+      case '1':
       $type = 'humidity';
+      break;
+      case '2':
+      $type = 'co2';
+      break;
+      case '3':
+      $type = 'type3';
       break;
     }
     $widget_type =  $widgets['widget_type'][$index];
-    $x = 2*($index%5);
-    $y = $index/5;
+    $x = 3*($index%4);
+    $y = $index/4;
     if($widget_type==='sensor'){
       ?>
 
-      <div id="widget<?=$widget_id?>" class="grid-stack-item" data-gs-x="<?=$x?>" data-gs-y="<?=$y?>" data-gs-width="2" data-gs-height="1" style="margin: 20px;">
+      <div id="widget<?=$widget_id?>" class="grid-stack-item" data-gs-x="<?=$x?>" data-gs-y="<?=$y?>" data-gs-width="3" data-gs-height="1" style="margin: 20px;">
         <div class="grid-stack-item-content widget" >
           <div class="widget-name">
-            <button id="<?=$sid?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
+            <button id="<?=$sensor_id?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
               <span class="glyphicon glyphicon-minus-sign"></span>
             </button>
-            <div class="name"><?=$widget_type?> - {{widgets.info.sensor_model[widgets.index[<?=$widget_id?>]]}}</div>
+            <div class="name"><?=$widget_type?> - {{widgets.info.sensor_id[widgets.index[<?=$widget_id?>]]}}</div>
           </div>
           <div class="widget-content">
            <div class="type">
@@ -149,11 +154,19 @@ $base_url = site_url('');
                   ?>
                   .
                   <?php
+                }else if($type=="co2"){
+                  ?>
+                  !
+                  <?php
+                }else if($type=="type3"){
+                  ?>
+                  _
+                  <?php
                 }
                 ?>
           </div>
-          <div class="gateway">
-            gid : {{widgets.info.sensor_gid[widgets.index[<?=$widget_id?>]]}}
+          <div class="node">
+            nid : {{widgets.info.sensor_nid[widgets.index[<?=$widget_id?>]]}}
           </div>
         </div><!-- /sensor-content -->
       </div><!-- /sensor-item-content -->
@@ -168,7 +181,7 @@ $base_url = site_url('');
           <button id="<?=$sid?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
             <span class="glyphicon glyphicon-minus-sign"></span>
           </button>
-          <div class="name"><?=$widget_type?> - {{widgets.info.sensor_model[widgets.index[<?=$widget_id?>]]}}</div>
+          <div class="name"><?=$widget_type?> - {{widgets.info.sensor_id[widgets.index[<?=$widget_id?>]]}}</div>
         </div>
         <div class="widget-content chart" align="center">
           <canvas  class="col-lg-11 col-sm-11" id="canvas<?=$widget_id?>" width="95%" height="15%"></canvas>
@@ -191,10 +204,10 @@ $base_url = site_url('');
 
             <?php
               for($i=0;$i<$data_date['cnt'][$sid];$i++){
-                $date = $data_date[$sid][$i];
+                $time = $data_time[$sid][$i];
                 $value = $data_value[$sid][$i];
                 ?>
-                 var date = '<?=$date?>';
+                 var date = '<?=$time?>';
                  var value = <?=$value?>;
                 dataChart.addData([value],date);
 
@@ -213,27 +226,26 @@ $base_url = site_url('');
 <script type="text/javascript">
 
  $(document).ready(function(){
-        $('#gateway').change(function(){ //any select change on the dropdown with id country trigger this code
+        $('#node').change(function(){ //any select change on the dropdown with id country trigger this code
         $("#included_sensors > option").remove(); //first of all clear select items
-            var gid = $('#gateway').val();  // here we are taking country id of the selected one.
+            var nid = $('#node').val();  // here we are taking country id of the selected one.
 
             $.ajax({
               type: "POST",
-                url: "<?php echo site_url('dashboard/get_included_sensors');?>/"+gid, //here we are calling our user controller and get_cities method with the country_id
+                url: "<?php echo site_url('dashboard/get_included_sensors');?>/"+nid, //here we are calling our user controller and get_cities method with the country_id
 
-                success: function(included_sensors) //we're calling the response json array 'included_sensors'
+              success: function(included_sensors) //we're calling the response json array 'included_sensors'
                 {
-                    $.each(included_sensors,function(sid,sensor_model) //here we're doing a foeach loop round each sensor with id as the key and city as the value
+                    $.each(included_sensors,function(sensor_id,contents) //here we're doing a foeach loop round each sensor with id as the key and city as the value
                     {
                         var opt = $('<option />'); // here we're creating a new select option with for each city
-                        opt.val(sid);
-                        opt.text(sensor_model);
+                        opt.val(sensor_id);
+                        opt.text(contents);
                         $('#included_sensors').append(opt); //here we will append these new select options to a dropdown with the id 'cities'
                       });
                   }
 
                 });
-
           });
 });
 
@@ -268,7 +280,7 @@ $base_url = site_url('');
                   element+= "<div class='name' id='name"+widget_id+"'>Please select Sensor</div></div>";
 
                   if(type==='sensor'){
-                    width = '2';
+                    width = '3';
                     height = '1';
                     element += "<div class='widget-content' align='center'>";
                     element += '<div id="sensor_content'+widget_id+'"><button class="btn add-sensor-btn btn-primary btn-md" data-widget_id='+widget_id+' data-toggle="modal" data-target="#selectSensorModal">센서 추가</button></div>';
@@ -296,19 +308,20 @@ $base_url = site_url('');
                  });
 
 function connectSensor(){
+  var nid = $('#node').val();
    var sid = $('#included_sensors').val();
    var widget_id = $('#widget_id').val();
    $.ajax({
       type: "POST",
-                url: "<?php echo site_url('dashboard/connect_widget_with_sensor');?>/"+widget_id+"/"+sid, //here we are calling our user controller and get_cities method with the country_id
+                url: "<?php echo site_url('dashboard/connect_widget_with_sensor');?>/"+widget_id+"/"+sid+"/"+nid, //here we are calling our user controller and get_cities method with the country_id
                 success: function(updated_widget) //we're calling the response json array 'included_sensors'
                 {
                   var type = updated_widget.widget_type;
-                  var name = updated_widget.sensor_model;
+                  var name = updated_widget.sensor_id;
                   var sensor_type = updated_widget.sensor_type;
                    document.getElementById('name'+widget_id).innerHTML = type + " - " +name;
                   if(type==='sensor'){
-                    var content = "<div class='type'>"+sensor_type+"</div><div class='value'>23</div><div class='update'>2분 전</div>";
+                    var content = "<div class='type'>"+sensor_type+"</div><div class='value'>"+updated_widget.recent_data+"</div><div class='update'>"+updated_widget.sensor_nid+"</div>";
                     document.getElementById('sensor_content'+widget_id).innerHTML = content;
                   }else if(type==='chart'){
                     document.getElementById('connect_sensor'+widget_id).innerHTML = '';

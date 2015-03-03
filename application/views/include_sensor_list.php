@@ -84,13 +84,7 @@ $(document).on("click",".open-updateDirectoryModal",function(){
      <button class="btn add-sensor-btn btn-default btn-md" data-toggle="modal" data-target="#selectSensorModal">
       <span class="glyphicon glyphicon-plus"> 센서 추가</span>
     </button>
-    <?php
-    if (isset($message_display)) {
-      echo "<div class='message'>";
-      echo $message_display;
-      echo "</div>";
-    }
-    ?>
+
     <!-- Sensor Modal -->
     <div class="modal fade" id="selectSensorModal" tabindex="-1" role="dialog" aria-labelledby="selectSensorModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -102,14 +96,14 @@ $(document).on("click",".open-updateDirectoryModal",function(){
           <div class="modal-body">
             Directory에 추가하고자 하는 Sensor를 선택하세요
             <br>
-            <?php $included_sensors['#'] = 'Select Gateway first'; ?>
-            <label for="gateway">Gateway: </label><?php echo form_dropdown('gateway_id', $gateways, '#', 'id="gateway" class="form-control"'); ?>
+            <?php $included_sensors['#'] = 'Select Sensor Node first'; ?>
+            <label for="node">Node: </label><?php echo form_dropdown('node_id', $nodes, '#', 'id="node" class="form-control"'); ?>
             <label for="sensor">Sensor: </label><?php echo form_dropdown('sensor_id', $included_sensors, '#', 'id="included_sensors" class="form-control"'); ?>
             <input type="hidden" id="did" name="did" value="<?=$did?>">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-            <input type="button" class="btn btn-primary" data-dismiss="modal" value=" Select " name="submit" onclick="addWidget('<?=$did?>')"/>
+            <input type="button" class="btn btn-primary" data-dismiss="modal" value=" Select " name="submit" onclick="addWidget(<?=$did?>)"/>
           </div>
         </div><!-- /modal-content -->
       </div><!-- /modal-dialog -->
@@ -126,60 +120,73 @@ $base_url = site_url('');
 <body ng-app='angular' ng-controller='directoryCtrl' ng-init="init('<?=$did?>','<?=$base_url?>')" >
 
 <!-- load included sensors in directory -->
-  <div class="sensor-bundle-list" align="center">
+  <div class="sensor-bundle-list" id="sensor-bundle-list" align="center">
     <?php
  // sensor type 1 : temperature, 2 : humidity
-    $type_cnt = array('1' =>'0' ,'2' =>'0','3' => '0' );
-    $type_names = array('1'=>'temperature', '2'=>'humidity');
+    $type_cnt = array('0' =>'0' ,'1' =>'0','2' => '0', '3' => '0' );
+    $type_names = array('0'=>'temperature', '1'=>'humidity', '2'=>'co2', '3'=>'type3');
     $groups = array
     (
+      '0' => array(),
       '1' => array(),
-      '2' => array()
+      '2' => array(),
+      '3' => array()
       );
     // grouping by each sensor type
-    foreach($sensors['sensor_gid'] as $k=>$v){
+    if(count($sensors)>0){
+    foreach($sensors['sensor_id'] as $k=>$v){
       switch($sensors['sensor_type'][$k]){
+        case '0':
+        $type = '0';
+        break;
         case '1':
         $type = '1';
         break;
         case '2':
         $type = '2';
         break;
+         case '3':
+        $type = '3';
+        break;
       }
       $groups[$type][$type_cnt[$type]]=$k;
       $type_cnt[$type] += 1;
     }
+  }else{
+    ?>
+    <h1>Please Add Sensor :D</h1>
+    <?php
+  }
 
-    for($i = 1; $i <= count($groups);$i++){
+    for($i = 0; $i < count($groups);$i++){
       // create sensor-bundle
       $type_name = $type_names[$i];
       if($type_cnt[$i]==='0')
-        break;
+        continue;
       ?>
-      <div id="<?=$type_name?>-bundle" class="sensor-bundle col-md-2 col-sm-3" align="center">
+      <div id="<?=$type_name?>-bundle" class="sensor-bundle col-md-3 col-sm-3" align="center">
         <div class="sensor-bundle-name" align="center">
           <?=$type_name?>
         </div>
         <div id="<?=$type_name?>-stack" class="grid-stack" data-gs-width="3">
          <?php
          for($j = 0;$j<count($groups[$i]);$j++){
-           $sid = $sensors['sid'][$groups[$i][$j]];
-           $sensor_gid = $sensors['sensor_gid'][$groups[$i][$j]];
-           $sensor_model = $sensors['sensor_model'][$groups[$i][$j]];
+           $nid = $sensors['sensor_nid'][$groups[$i][$j]];
+           $sid = $sensors['sensor_id'][$groups[$i][$j]];
            ?>
            <script>$('#<?=$type_name?>-bundle').css('height','+=130px');</script>
 
            <div id="<?=$sid?>" class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="12" data-gs-height="1.5">
             <div class="grid-stack-item-content sensor " >
               <div class="sensor-name">
-                <button id="<?=$sid?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$type_name?>','<?=$sid?>','<?=$did?>')">
+                <button type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$type_name?>','<?=$did?>','<?=$sid?>','<?=$nid?>')">
                   <span class="glyphicon glyphicon-minus-sign"></span>
                 </button>
-                <div class="name">{{sensors.info.sensor_model[sensors.index['<?=$sid?>']]}}</div>
+                <div class="name">{{sensors.info.sensor_id[sensors.index['<?=$sid?>']['<?=$nid?>']]}}</div>
               </div>
               <div class="sensor-content">
                 <div class="value">
-                  {{sensors.info.recent_data[sensors.index['<?=$sid?>']]}}
+                  {{sensors.info.recent_data[sensors.index['<?=$sid?>']['<?=$nid?>']]}}
                   <?php
                     if($type_name=="temperature"){
                       ?>
@@ -189,11 +196,18 @@ $base_url = site_url('');
                   ?>
                   .
                   <?php
-                }
+                }else if($type_name=="co2"){
                 ?>
+                !
+                <?php
+              }else if($type_name=="type3"){
+                ?>
+                _
+                <?php
+              }
+              ?>
                 </div>
-                <div class="gateway">gid :
-                  {{sensors.info.sensor_gid[sensors.index['<?=$sid?>']]}}
+                <div class="node">{{sensors.info.sensor_nid[sensors.index['<?=$sid?>']['<?=$nid?>']]}}
                 </div>
               </div><!-- /sensor-content -->
             </div><!-- /sensor-item-content -->
@@ -210,21 +224,21 @@ $base_url = site_url('');
 <script type="text/javascript">
 
  $(document).ready(function(){
-        $('#gateway').change(function(){ //any select change on the dropdown with id country trigger this code
+        $('#node').change(function(){ //any select change on the dropdown with id country trigger this code
         $("#included_sensors > option").remove(); //first of all clear select items
-            var gid = $('#gateway').val();  // here we are taking country id of the selected one.
+            var nid = $('#node').val();  // here we are taking country id of the selected one.
 
             $.ajax({
               type: "POST",
-                url: "<?php echo site_url('dashboard/get_included_sensors');?>/"+gid, //here we are calling our user controller and get_cities method with the country_id
+                url: "<?php echo site_url('dashboard/get_included_sensors');?>/"+nid, //here we are calling our user controller and get_cities method with the country_id
 
                 success: function(included_sensors) //we're calling the response json array 'included_sensors'
                 {
-                    $.each(included_sensors,function(sid,sensor_model) //here we're doing a foeach loop round each sensor with id as the key and city as the value
+                    $.each(included_sensors,function(sensor_id,contents) //here we're doing a foeach loop round each sensor with id as the key and city as the value
                     {
                         var opt = $('<option />'); // here we're creating a new select option with for each city
-                        opt.val(sid);
-                        opt.text(sensor_model);
+                        opt.val(sensor_id);
+                        opt.text(contents);
                         $('#included_sensors').append(opt); //here we will append these new select options to a dropdown with the id 'cities'
                       });
                   }
@@ -246,37 +260,17 @@ $base_url = site_url('');
 });
 
  function addWidget(did){
+    var nid = $('#node').val();
     var sid = $('#included_sensors').val();  // here we are taking
   $.ajax({
                 type: "POST",
-                url: "<?php echo site_url('dashboard/add_sensor_to_directory');?>/"+did+"/"+sid, //here we are calling our user controller and get_cities method with the country_id
+                url: "<?php echo site_url('dashboard/add_sensor_to_directory');?>/"+did+"/"+sid+"/"+nid, //here we are calling our user controller and get_cities method with the country_id
                 success: function(added_sensor) //we're calling the response json array 'included_sensors'
                 {
 
-                 $('#'+added_sensor.sensor_type+'-bundle').css('height',  '+=120px');
+                  $url = "<?php echo site_url('dashboard/load_directory');?>/"+did;
+                 window.location.href = $url;
 
-                 var element = "<div id='"+added_sensor.sid+"'' class='grid-stack-item' data-gs-x='3' data-gs-y='0'"
-                 +" data-gs-width='12' data-gs-height='1'>";
-                 element += "<div class='grid-stack-item-content sensor' >";
-                 element += "<div class='sensor-name'><button id='"+sid+"' ";
-                 element+= "type='button' class='btn btn-default btn-xs btn-sensor-control' onclick='removeWidget('"+added_sensor.sensor_type+"','"+added_sensor.sid+"','"+did+"'')'>";
-                 element+= "<span class='glyphicon glyphicon-minus-sign'></span></button>";
-                 element+= "<div class='name'>"+added_sensor.sensor_model+"</div></div>";
-                 element += "<div class='sensor-content'>";
-                 element += "<div class='value'>"+added_sensor.recent_data;
-                 if(added_sensor.sensor_type==='temperature'){
-                   element += " C";
-                 }else if(added_sensor.sensor_type==='humidity'){
-                  element += " . ";
-                 }
-                 element += "</div>";
-                 element += "<div class='gateway'>gid : "+added_sensor.sensor_gid+"</div>";
-                 element += "</div></div></div><!--sensor-item-->";
-
-                 var el = $.parseHTML(element);
-                 var grid = $('#'+added_sensor.sensor_type+'-stack').data('gridstack');
-                 grid.add_widget(el,0, 0, 12, 1,true);
-                 grid.resizable($('.grid-stack-item'),false);
                }
 
              });
@@ -284,17 +278,18 @@ $base_url = site_url('');
 
 }
 
-function removeWidget(type,sid,did){
+function removeWidget(type,did,sid,nid){
 
   $.ajax({
     type: "POST",
-                url: "<?php echo site_url('dashboard/delete_sensor_from_directory');?>/"+did+"/"+sid, //here we are calling our user controller and get_cities method with the country_id
+                url: "<?php echo site_url('dashboard/delete_sensor_from_directory');?>/"+did+"/"+sid+"/"+nid, //here we are calling our user controller and get_cities method with the country_id
 
-                success: function() //we're calling the response json array 'included_sensors'
+                success: function(result) //we're calling the response json array 'included_sensors'
                 {
                  $('#'+type+'-bundle').css('height',  '-=120px');
                  var grid = $('#'+type+'-stack').data('gridstack');
                  grid.remove_widget($('#'+sid));
+
                }
 
              });

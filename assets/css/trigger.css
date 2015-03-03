@@ -1,0 +1,81 @@
+.sub-header{
+  height: 60px;
+  vertical-align: middle;
+}
+
+.explorer {
+    line-height: 40px;
+    padding-left:20px;
+    display: inline-block;
+}
+
+.add-widget{
+    float: right;
+    display: inline-block;
+    line-height: 20px;
+    padding-right: 20px;
+}
+
+.add-widget-btn{
+  margin-top: 20px;
+}
+
+.add-sensor-bundle{
+    float: right;
+    display: inline-block;
+    line-height: 20px;
+    padding-right: 20px;
+}
+
+.add-sensor-btn{
+  margin-top: 20px;
+}
+
+form{
+    display: block;
+    position: relative;
+    top: 0%;
+    height: 230px;
+}
+
+.btn-delete, .btn-update{
+    margin: 2px;
+}
+
+body{
+        background-color: #F5F5F5;
+}
+
+#trigger_container{
+  display: ;
+}
+
+.trigger{
+  display: block;
+  margin: 10px;
+  padding: 10px;
+  font-size: 20px;
+  width: 500px;
+}
+.condition{
+  background-color: #FFB2B2;
+  display: block;
+  margin: 10px;
+  padding: 10px;
+  font-size: 20px;
+}
+.push-action{
+  background-color: #B2E6FF;
+  display: block;
+  margin: 10px;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.action-action{
+  background-color: #FFA366;
+  display: block;
+  margin: 10px;
+  padding: 10px;
+  font-size: 20px;
+}

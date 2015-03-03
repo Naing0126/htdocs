@@ -105,5 +105,9 @@ class Main extends CI_Controller {
         }
     }
 
+function utc(){
+      $data['result'] = $this->user_model->utc();
+        $this->load->view ('utc',$data);
+    }
 }
 ?>
