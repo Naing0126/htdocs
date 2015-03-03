@@ -21,6 +21,7 @@ class Data_model extends CI_Model{
 
 public function getValue($widgets_sid,$widgets_nid){
  $cnt = count($widgets_sid);
+ $data = null;
   for($i=0;$i<$cnt;$i++){
      $sid = $widgets_sid['sensor_id'][$i];
      $nid = $widgets_nid['sensor_nid'][$i];
@@ -40,6 +41,7 @@ public function getValue($widgets_sid,$widgets_nid){
 
 public function getTime($widgets_sid,$widgets_nid){
  $cnt = count($widgets_sid);
+ $data = null;
   for($i=0;$i<$cnt;$i++){
     $sid = $widgets_sid['sensor_id'][$i];
      $nid = $widgets_nid['sensor_nid'][$i];

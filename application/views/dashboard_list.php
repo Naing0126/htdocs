@@ -83,20 +83,35 @@
         <br>
         <input type="hidden" id="widget_id" name="widget_id" value="defalut">
         <?php $included_sensors['#'] = 'Select Sensor Node first'; ?>
-        <label for="node">Node: </label><?php echo form_dropdown('node_id', $nodes, '#', 'id="node" class="form-control"'); ?>
-        <label for="sensor">Sensor: </label><?php echo form_dropdown('sensor_id', $included_sensors, '#', 'id="included_sensors" class="form-control"'); ?>
+        <?php
+        if(count($nodes)>0){
+          ?>
+          <label for="node">Node: </label>
+          <?php
+          echo form_dropdown('node_id', $nodes, '#', 'id="node" class="form-control"');
+          ?>
+          <label for="sensor">Sensor: </label>
+          <?php
+          echo form_dropdown('sensor_id', $included_sensors, '#', 'id="included_sensors" class="form-control"');
+          ?>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+          <input type="button" class="btn btn-primary" data-dismiss="modal" value=" Select " name="submit" onclick="connectSensor()"/>
+        </div>
+        <?php
+      }else{
+        echo 'There is no nodes. Please register node first. ';
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-        <input type="button" class="btn btn-primary" data-dismiss="modal" value=" Select " name="submit" onclick="connectSensor()"/>
-      </div>
+      }
+      ?>
+
     </div><!-- /modal-content -->
   </div><!-- /modal-dialog -->
 </div><!-- /modal -->
 
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
-   <script src="/assets/js/angular_core.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+<script src="/assets/js/angular_core.js"></script>
 <?php
 $base_url = site_url('');
 ?>
@@ -104,34 +119,79 @@ $base_url = site_url('');
 
  <div id="main-stack" class="grid-stack" data-gs-width="12" align="center">
    <?php
-   foreach($widgets['sensor_nid'] as $k=>$v){
-    $length = count($widgets['sensor_nid']) -1;
-    $index = $length-$k;
-    $widget_id = $widgets['widget_id'][$index];
-    $sensor_nid = $widgets['sensor_nid'][$index];
-    $sensor_id = $widgets['sensor_id'][$index];
-    $type = $widgets['sensor_type'][$index];
-    switch($type){
-      case '0':
-      $type = 'temperature';
-      break;
-      case '1':
-      $type = 'humidity';
-      break;
-      case '2':
-      $type = 'co2';
-      break;
-      case '3':
-      $type = 'type3';
-      break;
-    }
-    $widget_type =  $widgets['widget_type'][$index];
-    $x = 3*($index%4);
-    $y = $index/4;
-    if($widget_type==='sensor'){
-      ?>
+   if(count($widgets['sensor_nid']) > 0){
+     foreach($widgets['sensor_nid'] as $k=>$v){
+      $length = count($widgets['sensor_nid']) -1;
+      $index = $length-$k;
+      $widget_id = $widgets['widget_id'][$index];
+      $sensor_nid = $widgets['sensor_nid'][$index];
+      $sensor_id = $widgets['sensor_id'][$index];
+      $type = $widgets['sensor_type'][$index];
+      switch($type){
+        case '0':
+        $type = 'temperature';
+        break;
+        case '1':
+        $type = 'humidity';
+        break;
+        case '2':
+        $type = 'co2';
+        break;
+        case '3':
+        $type = 'type3';
+        break;
+      }
+      $widget_type =  $widgets['widget_type'][$index];
+      $x = 3*($index%4);
+      $y = $index/4;
+      if($widget_type==='sensor'){
+        ?>
 
-      <div id="widget<?=$widget_id?>" class="grid-stack-item" data-gs-x="<?=$x?>" data-gs-y="<?=$y?>" data-gs-width="3" data-gs-height="1" style="margin: 20px;">
+        <div id="widget<?=$widget_id?>" class="grid-stack-item" data-gs-x="<?=$x?>" data-gs-y="<?=$y?>" data-gs-width="3" data-gs-height="1" style="margin: 20px;">
+          <div class="grid-stack-item-content widget" >
+            <div class="widget-name">
+              <button id="<?=$sensor_id?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
+                <span class="glyphicon glyphicon-minus-sign"></span>
+              </button>
+              <div class="name"><?=$widget_type?> - {{widgets.info.sensor_id[widgets.index[<?=$widget_id?>]]}}</div>
+            </div>
+            <div class="widget-content">
+             <div class="type">
+              <?=$type?>
+            </div>
+            <div class="value">
+              {{widgets.info.recent_data[widgets.index[<?=$widget_id?>]]}}
+              <?php
+              if($type=="temperature"){
+                ?>
+                C
+                <?php
+              }else if($type=="humidity"){
+                ?>
+                .
+                <?php
+              }else if($type=="co2"){
+                ?>
+                !
+                <?php
+              }else if($type=="type3"){
+                ?>
+                _
+                <?php
+              }
+              ?>
+            </div>
+            <div class="node">
+              nid : {{widgets.info.sensor_nid[widgets.index[<?=$widget_id?>]]}}
+            </div>
+          </div><!-- /sensor-content -->
+        </div><!-- /sensor-item-content -->
+      </div><!--/sensor-item-->
+      <?php
+    }
+    else if($widget_type==='chart'){
+      ?>
+      <div id="widget<?=$widget_id?>" class="grid-stack-item" data-gs-x="<?=$x?>" data-gs-y="<?=$y?>" data-gs-width="12" data-gs-height="2" style="margin: 20px;">
         <div class="grid-stack-item-content widget" >
           <div class="widget-name">
             <button id="<?=$sensor_id?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
@@ -139,89 +199,48 @@ $base_url = site_url('');
             </button>
             <div class="name"><?=$widget_type?> - {{widgets.info.sensor_id[widgets.index[<?=$widget_id?>]]}}</div>
           </div>
-          <div class="widget-content">
-           <div class="type">
-            <?=$type?>
-          </div>
-          <div class="value">
-            {{widgets.info.recent_data[widgets.index[<?=$widget_id?>]]}}
-             <?php
-                    if($type=="temperature"){
-                      ?>
-                      C
-              <?php
-                    }else if($type=="humidity"){
-                  ?>
-                  .
-                  <?php
-                }else if($type=="co2"){
-                  ?>
-                  !
-                  <?php
-                }else if($type=="type3"){
-                  ?>
-                  _
-                  <?php
+          <div class="widget-content chart" align="center">
+            <canvas  class="col-lg-11 col-sm-11" id="canvas<?=$widget_id?>" width="95%" height="15%"></canvas>
+            <script>
+              var testData = {
+                labels : [],
+                datasets : [
+                {
+                  fillColor : "rgba(172,194,132,0.4)",
+                  strokeColor : "#ACC26D",
+                  pointColor : "#fff",
+                  pointStrokeColor : "#9DB86D",
+                  data : []
                 }
-                ?>
-          </div>
-          <div class="node">
-            nid : {{widgets.info.sensor_nid[widgets.index[<?=$widget_id?>]]}}
-          </div>
-        </div><!-- /sensor-content -->
-      </div><!-- /sensor-item-content -->
-    </div><!--/sensor-item-->
-    <?php
-  }
-  else if($widget_type==='chart'){
-    ?>
-    <div id="widget<?=$widget_id?>" class="grid-stack-item" data-gs-x="<?=$x?>" data-gs-y="<?=$y?>" data-gs-width="12" data-gs-height="2" style="margin: 20px;">
-      <div class="grid-stack-item-content widget" >
-        <div class="widget-name">
-          <button id="<?=$sensor_id?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-          </button>
-          <div class="name"><?=$widget_type?> - {{widgets.info.sensor_id[widgets.index[<?=$widget_id?>]]}}</div>
-        </div>
-        <div class="widget-content chart" align="center">
-          <canvas  class="col-lg-11 col-sm-11" id="canvas<?=$widget_id?>" width="95%" height="15%"></canvas>
-          <script>
-            var testData = {
-              labels : [],
-              datasets : [
-              {
-                fillColor : "rgba(172,194,132,0.4)",
-                strokeColor : "#ACC26D",
-                pointColor : "#fff",
-                pointStrokeColor : "#9DB86D",
-                data : []
-              }
-              ]
-            };
+                ]
+              };
 
-            var datas = document.getElementById('canvas<?=$widget_id?>').getContext('2d');
-            var dataChart = new Chart(datas).Line(testData);
+              var datas = document.getElementById('canvas<?=$widget_id?>').getContext('2d');
+              var dataChart = new Chart(datas).Line(testData);
 
-            <?php
+              <?php
               for($i=0;$i<$data_date['cnt'][$sid];$i++){
                 $time = $data_time[$sid][$i];
                 $value = $data_value[$sid][$i];
                 ?>
-                 var date = '<?=$time?>';
-                 var value = <?=$value?>;
+                var date = '<?=$time?>';
+                var value = <?=$value?>;
                 dataChart.addData([value],date);
 
                 <?php
               }
-            ?>
-          </script>
-        </div><!-- /sensor-content -->
-      </div><!-- /sensor-item-content -->
-    </div><!--/sensor-item-->
-    <?php
+              ?>
+            </script>
+          </div>
+          </div><!-- /sensor-content -->
+        </div><!-- /sensor-item-content -->
+      </div><!--/sensor-item-->
+      <?php
+    }
   }
-}?>
-</div><!--sensor-stack-->
+}
+?>
+</div><!-- main-stack -->
 
 <script type="text/javascript">
 
@@ -235,7 +254,7 @@ $base_url = site_url('');
                 url: "<?php echo site_url('dashboard/get_included_sensors');?>/"+nid, //here we are calling our user controller and get_cities method with the country_id
 
               success: function(included_sensors) //we're calling the response json array 'included_sensors'
-                {
+              {
                     $.each(included_sensors,function(sensor_id,contents) //here we're doing a foeach loop round each sensor with id as the key and city as the value
                     {
                         var opt = $('<option />'); // here we're creating a new select option with for each city
@@ -270,6 +289,7 @@ $base_url = site_url('');
                 url: "<?php echo site_url('dashboard/add_widget_to_dashboard');?>/"+uid+"/"+type, //here we are calling our user controller and get_cities method with the country_id
                 success: function(added_widget) //we're calling the response json array 'included_sensors'
                 {
+                  alert('success!');
                   widget_id = added_widget.widget_id;
 
                   var element = "<div id='widget"+widget_id+"'' class='grid-stack-item'>";
@@ -288,7 +308,7 @@ $base_url = site_url('');
                     width = '12';
                     height = '2';
                     element += "<div class='widget-content chart' align='center'>";
-                     element += '<div id="connect_sensor'+widget_id+'"><button class="btn add-sensor-btn btn-primary btn-md" data-widget_id='+widget_id+' data-toggle="modal" data-target="#selectSensorModal">센서 추가</button></div>';
+                    element += '<div id="connect_sensor'+widget_id+'"><button class="btn add-sensor-btn btn-primary btn-md" data-widget_id='+widget_id+' data-toggle="modal" data-target="#selectSensorModal">센서 추가</button></div>';
                     element += "<canvas id='canvas"+widget_id+"' width='1400' height='100'>";
                     element += "</canvas>";
                   }
@@ -297,57 +317,57 @@ $base_url = site_url('');
 
                   var el = $.parseHTML(element);
                   var grid = $('#main-stack').data('gridstack');
-                grid.add_widget(el,0, 0, width, height, true);
-              }
-            });
+                  grid.add_widget(el,0, 0, width, height, true);
+                }
+              });
 }
 
- $(document).on("click", ".add-sensor-btn", function () {
-                   var widget_id = $(this).data('widget_id');
-                   $(".modal-body #widget_id").val(widget_id);
-                 });
+$(document).on("click", ".add-sensor-btn", function () {
+ var widget_id = $(this).data('widget_id');
+ $(".modal-body #widget_id").val(widget_id);
+});
 
 function connectSensor(){
   var nid = $('#node').val();
-   var sid = $('#included_sensors').val();
-   var widget_id = $('#widget_id').val();
-   $.ajax({
-      type: "POST",
+  var sid = $('#included_sensors').val();
+  var widget_id = $('#widget_id').val();
+  $.ajax({
+    type: "POST",
                 url: "<?php echo site_url('dashboard/connect_widget_with_sensor');?>/"+widget_id+"/"+sid+"/"+nid, //here we are calling our user controller and get_cities method with the country_id
                 success: function(updated_widget) //we're calling the response json array 'included_sensors'
                 {
                   var type = updated_widget.widget_type;
                   var name = updated_widget.sensor_id;
                   var sensor_type = updated_widget.sensor_type;
-                   document.getElementById('name'+widget_id).innerHTML = type + " - " +name;
+                  document.getElementById('name'+widget_id).innerHTML = type + " - " +name;
                   if(type==='sensor'){
                     var content = "<div class='type'>"+sensor_type+"</div><div class='value'>"+updated_widget.recent_data+"</div><div class='update'>"+updated_widget.sensor_nid+"</div>";
                     document.getElementById('sensor_content'+widget_id).innerHTML = content;
                   }else if(type==='chart'){
                     document.getElementById('connect_sensor'+widget_id).innerHTML = '';
-                     var testData = {
-                    labels : [],
-                    datasets : [
-                    {
-                      fillColor : "rgba(172,194,132,0.4)",
-                      strokeColor : "#ACC26D",
-                      pointColor : "#fff",
-                      pointStrokeColor : "#9DB86D",
-                      data : []
-                    }
-                    ]
-                  };
-                  document.getElementById('canvas'+widget_id).setAttribute('height','200');
+                    var testData = {
+                      labels : [],
+                      datasets : [
+                      {
+                        fillColor : "rgba(172,194,132,0.4)",
+                        strokeColor : "#ACC26D",
+                        pointColor : "#fff",
+                        pointStrokeColor : "#9DB86D",
+                        data : []
+                      }
+                      ]
+                    };
+                    document.getElementById('canvas'+widget_id).setAttribute('height','200');
                     var datas = document.getElementById('canvas'+widget_id).getContext('2d');
-                var dataChart = new Chart(datas).Line(testData);
-                var i;
-                for(i=1;i<updated_widget.cnt;i++){
-                  dataChart.addData([updated_widget.data_value[i]],updated_widget.data_date[i]);
-                }
+                    var dataChart = new Chart(datas).Line(testData);
+                    var i;
+                    for(i=1;i<updated_widget.cnt;i++){
+                      dataChart.addData([updated_widget.data_value[i]],updated_widget.data_date[i]);
+                    }
 
+                  }
                 }
-              }
-            });
+              });
 }
 
 function removeWidget(uid,widget_id){

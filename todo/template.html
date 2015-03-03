@@ -1,0 +1,19 @@
+<!doctype html>
+<html ng-app="myApp">
+ <head>
+  <meta charset="UTF-8">
+  <title>TODO App Demo</title>
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+  <script src="app.js"></script>
+ </head>
+<body ng-init="person = { name: '재도', favorit : ['사과','딸기','포도','','','','test']}">
+   <h1>Hello {{person.name}}</h1>
+    <p>second fruit : {{person.favorit[5]}}</p>
+   <p>좋아하는 과일의 갯수 : {{numberOfFavorit = person.favorit.length}}</p>
+   <p>과일 갯수 * $100 = {{numberOfFavorit * 100 | currency}}</p>
+   <p>재도가 맞나요? {{person.name == '재도'}}</p>
+   <p>좋아하는 과일 수가 4개보다 많나요? {{numberOfFavorit>4}}</p>
+   <p>scope에 없는 객체 접근 하면 ? {{car.type.name}}</p>
+ </body>
+</html>
