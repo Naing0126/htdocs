@@ -141,10 +141,10 @@ $base_url = site_url('');
         $type = 'door';
         break;
         case '4':
-        $type = 'airCleaner';
+        $type = 'air cleaner';
         break;
         case '5':
-        $type = 'warningLight';
+        $type = 'warning light';
         break;
       }
       $widget_type =  $widgets['widget_type'][$index];
@@ -221,19 +221,18 @@ $base_url = site_url('');
               var dataChart = new Chart(datas).Line(testData);
 
               <?php
-              for($i=0;$i<$data_date['cnt'][$sid];$i++){
+          echo 'test';
+              for($i=0;$i<$data_time['cnt'][$sid];$i++){
                 $time = $data_time[$sid][$i];
                 $value = $data_value[$sid][$i];
                 ?>
                 var date = '<?=$time?>';
                 var value = <?=$value?>;
                 dataChart.addData([value],date);
-
                 <?php
               }
               ?>
             </script>
-          </div>
           </div><!-- /sensor-content -->
         </div><!-- /sensor-item-content -->
       </div><!--/sensor-item-->
@@ -345,6 +344,7 @@ function connectSensor(){
                     var content = "<div class='type'>"+sensor_type+"</div><div class='value'>"+updated_widget.recent_data+"</div><div class='update'>"+updated_widget.sensor_nid+"</div>";
                     document.getElementById('sensor_content'+widget_id).innerHTML = content;
                   }else if(type==='chart'){
+
                     document.getElementById('connect_sensor'+widget_id).innerHTML = '';
                     var testData = {
                       labels : [],
@@ -358,12 +358,13 @@ function connectSensor(){
                       }
                       ]
                     };
+
                     document.getElementById('canvas'+widget_id).setAttribute('height','200');
                     var datas = document.getElementById('canvas'+widget_id).getContext('2d');
                     var dataChart = new Chart(datas).Line(testData);
                     var i;
-                    for(i=1;i<updated_widget.cnt;i++){
-                      dataChart.addData([updated_widget.data_value[i]],updated_widget.data_date[i]);
+                    for(i=updated_widget.cnt - 5;i<updated_widget.cnt;i++){
+                      dataChart.addData([updated_widget.data_value[i]],updated_widget.data_time[i]);
                     }
 
                   }
