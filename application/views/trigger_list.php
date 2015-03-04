@@ -52,9 +52,10 @@
                ?>
                <input type="text" id="condition_value" name="value" value="" placeholder="value">
                <?php
-               $condition_op = array('#'=>'-', 'higher'=>'<', 'lower'=>'>');
+               $condition_op = array('#'=>'-', 'higher'=>'클', 'lower'=>'작을');
                echo form_dropdown('condition_op', $condition_op, '#', 'id="condition_op" class=""');
                ?>
+                때,
              </div>
            </div>
            <div id="action">
@@ -72,7 +73,8 @@
               echo form_dropdown('sensor_id', $included_sensors, '#', 'id="action_included_sensors" class=""');
               $action_op = array('off'=>'off','on'=>'on');
               echo form_dropdown('action_op', $action_op, '#', 'id="action_op" class=""');
-              ?></div>
+              ?>
+              </div>
             </div>
             <input type="hidden" id="" name="did" value="">
           </div>
@@ -112,9 +114,10 @@
            ?>
            <input type="text" id="new_condition_value" name="value" value="" placeholder="value">
            <?php
-           $condition_op = array('#'=>'-', 'higher'=>'<', 'lower'=>'>');
+           $condition_op = array('#'=>'-', 'higher'=>'클', 'lower'=>'작을');
            echo form_dropdown('condition_op', $condition_op, '#', 'id="new_condition_op" class=""');
            ?>
+            때,
          </div>
        </div>
        <div id="action">
@@ -151,9 +154,9 @@
     <?php
     foreach($triggers as $entry){
       if($entry->c_op==='0'){
-        $c_op = '<';
+        $c_op = '클';
       }else if($entry->c_op==='1'){
-        $c_op = '>';
+        $c_op = '작을';
       }
       if($entry->action_type==='0'){
         $type = 'push';
@@ -161,7 +164,7 @@
         $type = 'action';
       }
 
-      $temp = '[before] sensor : '.$entry->c_sid . ', value : ' . $entry->c_value . ', op : ' . $c_op;
+      $temp = '[before] sensor : '.$entry->c_sid . ', value : ' . $entry->c_value . ' ' . $c_op . ' 때,';
       if($entry->action_type==='0'){
         $contents = $temp . ' / message : ' . $entry->a_message;
       }else if($entry->action_type==='1'){
@@ -171,7 +174,7 @@
       ?>
       <button class="open-updateTriggerModal btn trigger btn-default btn-md"  data-tid="<?=$entry->tid?>" data-contents="<?=$contents?>"data-toggle="modal" data-target="#UpdateTriggerModal" id="trigger-<?=$entry->tid?>">
         <div class="" >
-          <span class="condition">sensor : <?=$entry->c_sid?>, value : <?=$entry->c_value?>, op : <?=$c_op?></span>
+          <span class="condition">sensor : <?=$entry->c_sid?>, value : <?=$entry->c_value?> <?=$c_op?>  때, </span>
           <span class="<?=$type?>-action">
             <?php
             if($entry->action_type=='0'){
