@@ -23,7 +23,11 @@ class Sensor_model extends CI_Model{
     else if($sensor->sensor_type === '2')
       $type = 'co2';
       else if($sensor->sensor_type === '3')
-      $type = 'type3';
+      $type = 'door';
+      else if($sensor->sensor_type === '4')
+      $type = 'air clear';
+      else if($sensor->sensor_type === '5')
+      $type = 'warning light';
 
 
     $contents = $sensor->sensor_id . " , " . $type;

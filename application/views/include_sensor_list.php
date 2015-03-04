@@ -123,14 +123,16 @@ $base_url = site_url('');
   <div class="sensor-bundle-list" id="sensor-bundle-list" align="center">
     <?php
  // sensor type 1 : temperature, 2 : humidity
-    $type_cnt = array('0' =>'0' ,'1' =>'0','2' => '0', '3' => '0' );
-    $type_names = array('0'=>'temperature', '1'=>'humidity', '2'=>'co2', '3'=>'type3');
+    $type_cnt = array('0' =>'0' ,'1' =>'0','2' => '0', '3' => '0', '4' => '0', '5' => '0' );
+    $type_names = array('0'=>'temperature', '1'=>'humidity', '2'=>'co2', '3'=>'door', '4' =>'air clear', '5' => 'warning light');
     $groups = array
     (
       '0' => array(),
       '1' => array(),
       '2' => array(),
-      '3' => array()
+      '3' => array(),
+      '4' => array(),
+      '5' => array()
       );
     // grouping by each sensor type
     if(count($sensors)>0){
@@ -147,6 +149,12 @@ $base_url = site_url('');
         break;
          case '3':
         $type = '3';
+        break;
+        case '4':
+        $type = '4';
+        break;
+           case '5':
+        $type = '5';
         break;
       }
       $groups[$type][$type_cnt[$type]]=$k;
@@ -190,19 +198,15 @@ $base_url = site_url('');
                   <?php
                     if($type_name=="temperature"){
                       ?>
-                      C
+                      º
               <?php
                     }else if($type_name=="humidity"){
                   ?>
-                  .
+                  %
                   <?php
                 }else if($type_name=="co2"){
                 ?>
-                !
-                <?php
-              }else if($type_name=="type3"){
-                ?>
-                _
+                ppm
                 <?php
               }
               ?>

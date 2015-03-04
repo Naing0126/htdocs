@@ -138,7 +138,13 @@ $base_url = site_url('');
         $type = 'co2';
         break;
         case '3':
-        $type = 'type3';
+        $type = 'door';
+        break;
+        case '4':
+        $type = 'air cleaner';
+        break;
+        case '5':
+        $type = 'warning light';
         break;
       }
       $widget_type =  $widgets['widget_type'][$index];
@@ -163,11 +169,18 @@ $base_url = site_url('');
               {{widgets.info.recent_data[widgets.index[<?=$widget_id?>]]}}
               <?php
               if($type=="temperature"){
+                      ?>
+                      º
+              <?php
+                    }else if($type=="humidity"){
+                  ?>
+                  %
+                  <?php
+                }else if($type=="co2"){
                 ?>
-                C
+                ppm
                 <?php
               }
-
               ?>
             </div>
             <div class="node">

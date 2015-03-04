@@ -70,7 +70,7 @@
               $included_sensors['#'] = $action_types['#'] = 'Select Gateway first';
               echo form_dropdown('node_id', $nodes, '#', 'id="action_node"');
               echo form_dropdown('sensor_id', $included_sensors, '#', 'id="action_included_sensors" class=""');
-              $action_op = array('on'=>'on','off'=>'off');
+              $action_op = array('off'=>'off','on'=>'on');
               echo form_dropdown('action_op', $action_op, '#', 'id="action_op" class=""');
               ?></div>
             </div>
@@ -130,7 +130,7 @@
           $included_sensors['#'] = $action_types['#'] = 'Select Node first';
           echo form_dropdown('node_id', $nodes, '#', 'id="new_action_node"');
           echo form_dropdown('sensor_id', $included_sensors, '#', 'id="new_action_included_sensors" class=""');
-          $action_op = array('on'=>'on','off'=>'off');
+          $action_op = array('off'=>'off','on'=>'on');
           echo form_dropdown('action_op', $action_op, '#', 'id="new_action_op" class=""');
           ?></div>
         </div>
@@ -150,21 +150,21 @@
   <div id="trigger_container" align="center">
     <?php
     foreach($triggers as $entry){
-      if($entry->c_op=='0'){
-        $c_op = '>';
-      }else if($entry->c_op=='1'){
+      if($entry->c_op==='0'){
         $c_op = '<';
+      }else if($entry->c_op==='1'){
+        $c_op = '>';
       }
-      if($entry->action_type=='0'){
+      if($entry->action_type==='0'){
         $type = 'push';
-      }else if($entry->action_type=='1'){
+      }else if($entry->action_type==='1'){
         $type = 'action';
       }
 
       $temp = '[before] sensor : '.$entry->c_sid . ', value : ' . $entry->c_value . ', op : ' . $c_op;
-      if($entry->action_type=='0'){
+      if($entry->action_type==='0'){
         $contents = $temp . ' / message : ' . $entry->a_message;
-      }else if($entry->action_type=='1'){
+      }else if($entry->action_type==='1'){
         $contents = $temp . 'sensor : ' . $entry->a_sid . ', op : ' . $entry->a_op;
       }
 
@@ -360,9 +360,9 @@ function addTrigger(uid){
 }
 
 if($('#action_op').val() === 'on'){
-  info['a_op'] = 0;
+  info['a_op'] = 1;
 }else if($('#action_op').val() === 'off'){
- info['a_op'] = 1;
+ info['a_op'] = 0;
 }
 
 $.ajax({
@@ -407,9 +407,9 @@ function updateTrigger(){
  }
 
  if($('#new_action_op').val() === 'on'){
-  info['a_op'] = 0;
+  info['a_op'] = 1;
 }else if($('#new_action_op').val() === 'off'){
- info['a_op'] = 1;
+ info['a_op'] = 0;
 }
 $.ajax({
   type: "POST",
