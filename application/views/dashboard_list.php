@@ -141,10 +141,10 @@ $base_url = site_url('');
         $type = 'door';
         break;
         case '4':
-        $type = 'air cleaner';
+        $type = 'airCleaner';
         break;
         case '5':
-        $type = 'warning light';
+        $type = 'warningLight';
         break;
       }
       $widget_type =  $widgets['widget_type'][$index];

@@ -101,9 +101,9 @@ function update_widget($data){
       else if($widget->sensor_type === '3')
         $type = 'door';
       else if($widget->sensor_type === '4')
-        $type = 'air cleaner';
+        $type = 'airCleaner';
       else if($widget->sensor_type === '5')
-        $type = 'warning light';
+        $type = 'warningLight';
 
       $updated_widget['widget_type'] = $widget->widget_type;
       $updated_widget['sensor_id'] = $widget->sensor_id;

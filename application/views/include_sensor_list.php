@@ -124,7 +124,7 @@ $base_url = site_url('');
     <?php
  // sensor type 1 : temperature, 2 : humidity
     $type_cnt = array('0' =>'0' ,'1' =>'0','2' => '0', '3' => '0', '4' => '0', '5' => '0' );
-    $type_names = array('0'=>'temperature', '1'=>'humidity', '2'=>'co2', '3'=>'door', '4' =>'air clear', '5' => 'warning light');
+    $type_names = array('0'=>'temperature', '1'=>'humidity', '2'=>'co2', '3'=>'door', '4' =>'airCleaner', '5' => 'warningLight');
     $groups = array
     (
       '0' => array(),

@@ -48,7 +48,11 @@ class Include_model extends CI_Model{
         else if($sensor->sensor_type === '2')
           $type = 'co2';
         else if($sensor->sensor_type === '3')
-          $type = 'type3';
+          $type = 'door';
+        else if($sensor->sensor_type === '4')
+          $type = 'airCleaner';
+        else if($sensor->sensor_type === '5')
+          $type = 'warningLight';
 
         $added_sensor['sensor_nid'] = $sensor->sensor_nid;
         $added_sensor['sensor_id'] = $sensor->sensor_id;
