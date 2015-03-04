@@ -166,19 +166,8 @@ $base_url = site_url('');
                 ?>
                 C
                 <?php
-              }else if($type=="humidity"){
-                ?>
-                .
-                <?php
-              }else if($type=="co2"){
-                ?>
-                !
-                <?php
-              }else if($type=="type3"){
-                ?>
-                _
-                <?php
               }
+
               ?>
             </div>
             <div class="node">
