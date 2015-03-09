@@ -128,8 +128,9 @@ function delete_sensor_from_directory($did,$sid,$nid) {
     'sid' => $sid,
     'nid' =>$nid
     );
-  $result = $this->include_model->delete_include($data) ;
-
+  header('Content-Type: application/json; charset=utf-8');
+ echo(json_encode($this->include_model->delete_include($data)));
+  exit;
 }
 
 function dashboard_list(){

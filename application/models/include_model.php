@@ -58,24 +58,24 @@ class Include_model extends CI_Model{
         $added_sensor['sensor_id'] = $sensor->sensor_id;
         $added_sensor['sensor_type'] = $type;
 
-      $condition2 = "data_sid =" . "'" . $data['sid'] . "' and data_nid=" . "'" . $data['nid'] . "'";
-           $this->db->select('*');
-     $this->db->where($condition2);
-     $this->db->from('data');
-     $this->db->order_by('data_id', 'DESC');
-     $this->db->limit(1);
-     $temp = $this->db->get();
-     if($temp->num_rows() == 0){
+        $condition2 = "data_sid =" . "'" . $data['sid'] . "' and data_nid=" . "'" . $data['nid'] . "'";
+        $this->db->select('*');
+        $this->db->where($condition2);
+        $this->db->from('data');
+        $this->db->order_by('data_id', 'DESC');
+        $this->db->limit(1);
+        $temp = $this->db->get();
+        if($temp->num_rows() == 0){
          $added_sensor['recent_data']= 'null';
-     }
-     foreach($temp->result() as $t){
-      $added_sensor['recent_data']= $t->data_value;
-    }
-
+       }
+       foreach($temp->result() as $t){
+        $added_sensor['recent_data']= $t->data_value;
       }
-      return $added_sensor;
+
     }
+    return $added_sensor;
   }
+}
 
 }
 
@@ -85,17 +85,27 @@ function delete_include($data) {
  $condition = "did =" . "'" . $data['did'] . "' and sid=" . "'" . $data['sid'] . "' and nid=" . "'" . $data['nid'] . "'";
  $this->db->select(' * ');
  $this->db->from('include');
+ $this->db->join('sensor','sensor.sensor_id = include.sid and sensor.sensor_nid = include.nid');
  $this->db->where($condition);
  $this->db->limit(1);
  $query = $this->db->get();
  if ($query->num_rows() == 1) {
 // Query to insert directory in database
-  $this->db->delete('include', $data);
-  if ($this->db->affected_rows() > 0) {
-    return true;
+   foreach($query->result() as $v){
+    $sensor_type = $v->sensor_type;
+     $this->db->delete('include', $data);
+     if ($this->db->affected_rows() > 0) {
+      $condition = "did =" . "'" . $data['did'] ."' and sensor_type=" . "'" . $sensor_type . "'";
+      $this->db->select('*');
+      $this->db->from('include');
+      $this->db->join('sensor','sensor.sensor_id = include.sid and sensor.sensor_nid = include.nid');
+      $this->db->where($condition);
+      $query = $this->db->get();
+      $cnt = $query->num_rows();
+      $data['cnt'] = $cnt;
+      return $data;
+    }
   }
-} else {
-  return false;
 }
 }
 
@@ -120,7 +130,7 @@ public function get_included_sensors($did){
      $this->db->limit(1);
      $temp = $this->db->get();
      if($temp->num_rows() == 0){
-         $data['info']['recent_data'][]= 'null';
+       $data['info']['recent_data'][]= 'null';
      }
      foreach($temp->result() as $t){
       $data['info']['recent_data'][]= $t->data_value;

@@ -116,7 +116,7 @@ function update_widget($data){
       $query = $this->db->get()->result();
      $updated_widget['cnt'] = count($query);
      for($i=0;$i<count($query);$i++){
-      $updated_widget['data_time'][$i]=$query[$i]->data_time;
+      $updated_widget['data_stime'][$i]=$query[$i]->data_stime;
       $updated_widget['data_value'][$i]=$query[$i]->data_value;
      }
 
@@ -222,7 +222,7 @@ public function get_included_sensors($uid){
          $data['data'][$cnt]= 'null';
      }
      foreach($temp2->result() as $t){
-      $data['data'][$cnt]['data_time'][]= $t->data_time;
+      $data['data'][$cnt]['data_stime'][]= $t->data_stime;
       $data['data'][$cnt]['data_value'][]= $t->data_value;
     }
 

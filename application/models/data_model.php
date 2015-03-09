@@ -5,14 +5,14 @@ class Data_model extends CI_Model{
   }
 
   public function gets($sid){
-   $this->db->select('data_date,data_time,data_value');
+   $this->db->select('data_stime,data_value');
    $this->db->from('data');
    $this->db->where('data.data_sid',$sid);
    $query = $this->db->get();
    if($query->num_rows() > 0){
     foreach($query->result() as $v){
       $data[][] = $v->data_date;
-      $data['data_time'][] = $v->data_time;
+      $data['data_stime'][] = $v->data_stime;
       $data['data_value'][] = $v->data_value;
     }
     return $data;
@@ -53,7 +53,7 @@ public function getTime($widgets_sid,$widgets_nid){
       $query = $this->db->get()->result();
       $data['cnt'][$sid][$nid] = count($query);
       for($j=0;$j<count($query);$j++){
-        $data[$sid][$nid][$j]=$query[$j]->data_time;
+        $data[$sid][$nid][$j]=$query[$j]->data_stime;
       }
   }
    return $data;

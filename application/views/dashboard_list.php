@@ -222,8 +222,8 @@ $base_url = site_url('');
 
               <?php
           echo 'test';
-              for($i=0;$i<$data_time['cnt'][$sid];$i++){
-                $time = $data_time[$sid][$i];
+              for($i=0;$i<$data_stime['cnt'][$sid];$i++){
+                $time = $data_stime[$sid][$i];
                 $value = $data_value[$sid][$i];
                 ?>
                 var date = '<?=$time?>';
@@ -363,8 +363,8 @@ function connectSensor(){
                     var datas = document.getElementById('canvas'+widget_id).getContext('2d');
                     var dataChart = new Chart(datas).Line(testData);
                     var i;
-                    for(i=updated_widget.cnt - 10;i<updated_widget.cnt;i++){
-                      dataChart.addData([updated_widget.data_value[i]],updated_widget.data_time[i]);
+                    for(i=updated_widget.cnt - 5;i<updated_widget.cnt;i++){
+                      dataChart.addData([updated_widget.data_value[i]],updated_widget.data_stime[i]);
                     }
 
                   }

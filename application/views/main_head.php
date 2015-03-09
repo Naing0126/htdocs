@@ -77,7 +77,7 @@
 
                             <div class="row">
                               <?php echo form_open('main/user_login_process'); ?>
-                              <?
+                              <?php
                               echo "<div class='error_msg'>";
                               if (isset($error_message)) {
                                 echo $error_message;
@@ -93,7 +93,7 @@
                                 echo "</div>";
                             }
                             ?>
-                            <div class="col-md-4 col-md-offset-4">
+                            <div class="col-md-4 col-md-offset-4 login-form">
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="userid" id="userid" placeholder="User id ">
                                 </div>

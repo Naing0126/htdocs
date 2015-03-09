@@ -22,6 +22,11 @@ class Main extends CI_Controller {
         $this->load->view('main_content');
         $this->load->view('main_footer');
     }
+    function result($data){
+        $this->load->view('main_head',$data);
+        $this->load->view('main_content');
+        $this->load->view('main_footer');
+    }
     function get($id){
         $topics = $this->topic_model->gets();
         $topic = $this->topic_model->get($id);
@@ -53,10 +58,10 @@ class Main extends CI_Controller {
             $result = $this->user_model->registration_insert($data) ;
             if ($result == TRUE) {
                 $data['message_display'] = 'Registration Successfully !';
-                $this->index($data);
+                $this->result($data);
             } else {
-                $data['message_display'] = 'Username already exist!';
-                $this->index($data);
+                $data['message_display'] = 'User id already exist!';
+                $this->result($data);
             }
         }
     }
@@ -68,8 +73,7 @@ class Main extends CI_Controller {
         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == FALSE) {
-            $data['error_message'] = 'invalid id or pw!';
-            $this->index($data);
+          $this->index();
         } else {
             $data = array(
                 'user_id' => $this->input->post('userid'),
@@ -98,9 +102,9 @@ class Main extends CI_Controller {
                 }
             }else{
                 $data = array(
-                    'error_message' => 'Invalid Username or Password'
+                    'error_message' => '해당 정보로 등록된 회원이 없습니다. id와 pw를 확인해주세요.'
                     );
-                $this->index($data);
+                $this->result($data);
             }
         }
     }
