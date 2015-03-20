@@ -25,20 +25,23 @@ class Sensor_model extends CI_Model{
 
 function get_included_sensor_list($nodes){
   $sensor_list = array();
-  foreach($nodes as $node){
-    $nid = $node;
-    $this->db->select('*');
-    $this->db->from('sensor');
-    $this->db->where('sensor_nid',$nid);
-    $query = $this->db->get();
-    if($query->num_rows() == '0'){
-      $sensor_list[$nid]['type'][0] = 'null';
+  if(count($nodes)>0){
+    foreach($nodes as $node){
+      $nid = $node;
+      $this->db->select('*');
+      $this->db->from('sensor');
+      $this->db->where('sensor_nid',$nid);
+      $query = $this->db->get();
+      if($query->num_rows() == '0'){
+        $sensor_list[$nid]['type'][0] = 'null';
+      }
+      foreach ($query->result() as $sensor) {
+        $contents = $sensor->sensor_id . " , " . $sensor->sensor_type;
+        $sensor_list[$nid]['type'][] = $sensor->sensor_type;
+        $sensor_list[$nid]['sid'][] = $sensor->sensor_id;
+      }
     }
-    foreach ($query->result() as $sensor) {
-      $contents = $sensor->sensor_id . " , " . $sensor->sensor_type;
-      $sensor_list[$nid]['type'][] = $sensor->sensor_type;
-      $sensor_list[$nid]['sid'][] = $sensor->sensor_id;
-    }
+  }else{
   }
 
   return $sensor_list;
@@ -51,12 +54,12 @@ public function insert_sensor($data) {
  $this->db->where($condition);
  $temp = $this->db->get();
 
-$result['cnt'] = $temp->num_rows();
+ $result['cnt'] = $temp->num_rows();
  if($result['cnt'] == 0){
   // connect with exist node
   $this->db->insert('sensor',$data);
- }
+}
 
- return $result;
+return $result;
 }
 }
