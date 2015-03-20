@@ -1,0 +1,68 @@
+.sub-header{
+  height: 60px;
+  vertical-align: middle;
+}
+
+.explorer {
+    line-height: 40px;
+    padding-left:20px;
+    display: inline-block;
+}
+
+.add-widget{
+    float: right;
+    display: inline-block;
+    line-height: 20px;
+    padding-right: 20px;
+}
+
+.add-widget-btn{
+  margin-top: 20px;
+}
+
+.add-sensor-bundle{
+    float: right;
+    display: inline-block;
+    line-height: 20px;
+    padding-right: 20px;
+}
+
+.add-sensor-btn{
+  margin-top: 20px;
+}
+
+form{
+    display: block;
+    position: relative;
+    top: 0%;
+    height: 230px;
+}
+
+
+.btn-delete, .btn-update{
+    margin: 2px;
+}
+
+body{
+        background-color: #F5F5F5;
+}
+
+#sensor_container{
+  display: block;
+}
+
+#list{
+    display: inline-block;
+}
+
+.nodes_list li{
+    display: block;
+    color: blue;
+    text-align: left;
+}
+
+.sensors_list li{
+    display: block;
+    color: orange;
+    text-align: left;
+}

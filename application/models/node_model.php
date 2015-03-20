@@ -4,6 +4,7 @@ class Node_model extends CI_Model{
         parent::__construct();
     }
 
+/*
     public function gets($uid){
         $this->db->select('*');
         $this->db->from('node');
@@ -17,6 +18,5 @@ class Node_model extends CI_Model{
             return $data;
         }
     }
-
-
+*/
 }

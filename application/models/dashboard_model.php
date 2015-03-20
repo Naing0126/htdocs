@@ -92,23 +92,11 @@ function update_widget($data){
     $query = $this->db->get();
     $updated_widget = array();
     foreach ($query->result() as $widget) {
-      if($widget->sensor_type === '0')
-        $type = 'temperature';
-      else if($widget->sensor_type === '1')
-        $type = 'humidity';
-      else if($widget->sensor_type === '2')
-        $type = 'co2';
-      else if($widget->sensor_type === '3')
-        $type = 'door';
-      else if($widget->sensor_type === '4')
-        $type = 'airCleaner';
-      else if($widget->sensor_type === '5')
-        $type = 'warningLight';
 
       $updated_widget['widget_type'] = $widget->widget_type;
       $updated_widget['sensor_id'] = $widget->sensor_id;
       $updated_widget['sensor_nid'] = $widget->sensor_nid;
-      $updated_widget['sensor_type'] = $type;
+      $updated_widget['sensor_type'] = $widget->sensor_type;
 
       $this->db->select(' * ');
       $this->db->from('data');
@@ -190,7 +178,7 @@ function delete_widget($data) {
 public function get_included_sensors($uid){
  $this->db->select('*');
  $this->db->from('dashboard');
- $this->db->join('sensor','sensor.sensor_id = dashboard.sensor_id');
+ $this->db->join('sensor','sensor.sensor_id = dashboard.sensor_id and sensor.sensor_nid = dashboard.sensor_nid');
  $this->db->where('dashboard_id',$uid);
  $query = $this->db->get();
  if($query->num_rows() > 0){

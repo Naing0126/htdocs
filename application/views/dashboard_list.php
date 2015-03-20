@@ -79,7 +79,7 @@
         <h4 class="modal-title" id="myModalLabel">Directory에 추가할 Sensor 선택</h4>
       </div>
       <div class="modal-body">
-        Directory에 추가하고자 하는 Sensor를 선택하세요
+        Dashboard에 추가하고자 하는 Sensor를 선택하세요
         <br>
         <input type="hidden" id="widget_id" name="widget_id" value="defalut">
         <?php $included_sensors['#'] = 'Select Sensor Node first'; ?>
@@ -93,18 +93,15 @@
           <label for="sensor">Sensor: </label>
           <?php
           echo form_dropdown('sensor_id', $included_sensors, '#', 'id="included_sensors" class="form-control"');
-          ?>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-          <input type="button" class="btn btn-primary" data-dismiss="modal" value=" Select " name="submit" onclick="connectSensor()"/>
-        </div>
-        <?php
-      }else{
-        echo 'There is no nodes. Please register node first. ';
-
-      }
-      ?>
+        }else{
+          echo 'There is no nodes. Please register node first. ';
+        }
+        ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+        <input type="button" class="btn btn-primary" data-dismiss="modal" value=" Select " name="submit" onclick="connectSensor()"/>
+      </div>
 
     </div><!-- /modal-content -->
   </div><!-- /modal-dialog -->
@@ -127,26 +124,7 @@ $base_url = site_url('');
       $sensor_nid = $widgets['sensor_nid'][$index];
       $sensor_id = $widgets['sensor_id'][$index];
       $type = $widgets['sensor_type'][$index];
-      switch($type){
-        case '0':
-        $type = 'temperature';
-        break;
-        case '1':
-        $type = 'humidity';
-        break;
-        case '2':
-        $type = 'co2';
-        break;
-        case '3':
-        $type = 'door';
-        break;
-        case '4':
-        $type = 'air cleaner';
-        break;
-        case '5':
-        $type = 'warning light';
-        break;
-      }
+
       $widget_type =  $widgets['widget_type'][$index];
       $x = 3*($index%4);
       $y = $index/4;
@@ -169,14 +147,14 @@ $base_url = site_url('');
               {{widgets.info.recent_data[widgets.index[<?=$widget_id?>]]}}
               <?php
               if($type=="temperature"){
-                      ?>
-                      º
-              <?php
-                    }else if($type=="humidity"){
-                  ?>
-                  %
-                  <?php
-                }else if($type=="co2"){
+                ?>
+                º
+                <?php
+              }else if($type=="humidity"){
+                ?>
+                %
+                <?php
+              }else if($type=="co2"){
                 ?>
                 ppm
                 <?php
@@ -221,7 +199,7 @@ $base_url = site_url('');
               var dataChart = new Chart(datas).Line(testData);
 
               <?php
-          echo 'test';
+              echo 'test';
               for($i=0;$i<$data_stime['cnt'][$sid];$i++){
                 $time = $data_stime[$sid][$i];
                 $value = $data_value[$sid][$i];
@@ -316,6 +294,7 @@ $base_url = site_url('');
                   element += "</div></div><!--sensor-item-->";
 
                   var el = $.parseHTML(element);
+
                   var grid = $('#main-stack').data('gridstack');
                   grid.add_widget(el,0, 0, width, height, true);
                 }

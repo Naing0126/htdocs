@@ -121,55 +121,36 @@ $base_url = site_url('');
 
   <!-- load included sensors in directory -->
   <div class="sensor-bundle-list" id="sensor-bundle-list" align="center">
-    <?php
- // sensor type 1 : temperature, 2 : humidity
-    $type_cnt = array('0' =>'0' ,'1' =>'0','2' => '0', '3' => '0', '4' => '0', '5' => '0' );
+      <?php
+    $type_cnt = array('temperature' =>'0' ,'humidity' =>'0','co2' => '0', 'door' => '0', 'airCleaner' => '0', 'warningLight' => '0' );
     $type_names = array('0'=>'temperature', '1'=>'humidity', '2'=>'co2', '3'=>'door', '4' =>'airCleaner', '5' => 'warningLight');
     $groups = array
     (
-      '0' => array(),
-      '1' => array(),
-      '2' => array(),
-      '3' => array(),
-      '4' => array(),
-      '5' => array()
+      'temperature' => array(),
+      'humidity' => array(),
+      'co2' => array(),
+      'door' => array(),
+      'airCleaner' => array(),
+      'warningLight' => array()
       );
     // grouping by each sensor type
     if(count($sensors)>0){
       foreach($sensors['sensor_id'] as $k=>$v){
-        switch($sensors['sensor_type'][$k]){
-          case '0':
-          $type = '0';
-          break;
-          case '1':
-          $type = '1';
-          break;
-          case '2':
-          $type = '2';
-          break;
-          case '3':
-          $type = '3';
-          break;
-          case '4':
-          $type = '4';
-          break;
-          case '5':
-          $type = '5';
-          break;
-        }
+        $type = $sensors['sensor_type'][$k];
         $groups[$type][$type_cnt[$type]]=$k;
         $type_cnt[$type] += 1;
       }
     }else{
       ?>
       <h1>Please Add Sensor :D</h1>
+
       <?php
     }
 
     for($i = 0; $i < count($groups);$i++){
       // create sensor-bundle
       $type_name = $type_names[$i];
-      if($type_cnt[$i]==='0')
+      if($type_cnt[$type_name]<1)
         continue;
       ?>
       <div id="<?=$type_name?>-bundle" class="sensor-bundle col-md-3 col-sm-3" align="center">
@@ -178,9 +159,9 @@ $base_url = site_url('');
         </div>
         <div id="<?=$type_name?>-stack" class="grid-stack" data-gs-width="3">
          <?php
-         for($j = 0;$j<count($groups[$i]);$j++){
-           $nid = $sensors['sensor_nid'][$groups[$i][$j]];
-           $sid = $sensors['sensor_id'][$groups[$i][$j]];
+         for($j = 0;$j<count($groups[$type_name]);$j++){
+           $nid = $sensors['sensor_nid'][$groups[$type_name][$j]];
+           $sid = $sensors['sensor_id'][$groups[$type_name][$j]];
            ?>
            <script>$('#<?=$type_name?>-bundle').css('height','+=130px');</script>
 
@@ -271,6 +252,9 @@ $base_url = site_url('');
                 url: "<?php echo site_url('dashboard/add_sensor_to_directory');?>/"+did+"/"+sid+"/"+nid, //here we are calling our user controller and get_cities method with the country_id
                 success: function(added_sensor) //we're calling the response json array 'included_sensors'
                 {
+
+                  if(added_sensor==null)
+                    alert("the sensor is exist in thid directory!");
 
                   $url = "<?php echo site_url('dashboard/load_directory');?>/"+did;
                   window.location.href = $url;

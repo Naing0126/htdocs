@@ -12,6 +12,7 @@ class Dashboard extends CI_Controller {
     $this->load->model('dashboard_model');
     $this->load->model('data_model');
     $this->load->model('trigger_model');
+    $this->load->model('connect_model');
          // Load form helper library
     $this->load->helper('form');
          // Load form validation library
@@ -101,7 +102,7 @@ function load_directory($did){
  $data['did'] = $did;
  $data['directory_name'] = $this->directory_model->getName($did);
  $uid = $this->session->userdata('uid');
- $data['nodes'] = $this->node_model->gets($uid);
+ $data['nodes'] = $this->connect_model->get_connected_nodes($uid);
  $this->load->view('include_sensor_list',$data);
 }
 
@@ -142,7 +143,7 @@ function dashboard_list(){
  $data['data_time'] = $this->data_model->getTime($widgets_sid, $widgets_nid);
  $data['data_value'] = $this->data_model->getValue($widgets_sid,$widgets_nid);
  $data['uid'] = $uid;
- $data['nodes'] = $this->node_model->gets($uid);
+ $data['nodes'] = $this->connect_model->get_connected_nodes($uid);
  $this->load->view('dashboard_list',$data);
 }
 function add_sensor_to_dashboard($uid,$sid) {
@@ -204,7 +205,7 @@ function update_widget_position($uid,$widget_id,$x,$y) {
 function trigger_list(){
   $uid = $this->session->userdata('uid');
   $data['uid'] = $uid;
-  $data['nodes'] = $this->node_model->gets($uid);
+  $data['nodes'] = $this->connect_model->get_connected_nodes($uid);
   $data['triggers'] = $this->trigger_model->gets($uid);
   $this->load->view('trigger_list',$data);
 }
@@ -227,6 +228,38 @@ function delete_trigger($tid) {
  header('Content-Type: application/json; charset=utf-8');
  echo(json_encode($this->trigger_model->delete_trigger($data)));
  exit;
+}
+
+function sensor_list(){
+   $uid = $this->session->userdata('uid');
+  $data['uid'] = $uid;
+  $data['nodes'] = $this->connect_model->get_connected_nodes($uid);
+  $data['sensor_list'] = $this->sensor_model->get_included_sensor_list($data['nodes']);
+  $this->load->view('sensor_list',$data);
+}
+
+
+function add_node() {
+   $info = json_decode(stripslashes($_POST["info"]));
+ header('Content-Type: application/json; charset=utf-8');
+echo(json_encode($this->connect_model->insert_node($info)));
+  exit;
+}
+
+function add_sensor() {
+   $info = json_decode(stripslashes($_POST["info"]));
+ header('Content-Type: application/json; charset=utf-8');
+echo(json_encode($this->sensor_model->insert_sensor($info)));
+  exit;
+}
+
+function disconnect_node($uid, $nid) {
+$data['uid'] = $uid;
+$data['nid'] = $nid;
+echo $uid;
+echo $nid;
+echo(json_encode($this->connect_model->disconnect_node($data)));
+  exit;
 }
 
     // Logout from admin page

@@ -55,6 +55,9 @@
                         <li>
                             <a class="trigger" href="<?php echo site_url('dashboard/trigger_list');?>" target="board" >Trigger</a>
                         </li>
+                        <li>
+                            <a class="page-scroll" href="<?php echo site_url('dashboard/sensor_list');?>" target="board"> Sensors </a>
+                        </li>
                          <li>
                            <div class="userinfo">Hello <span class="user_name"><?php echo $user_name; ?></span> !</div>
                         </li>

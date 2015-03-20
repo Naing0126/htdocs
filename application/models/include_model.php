@@ -41,22 +41,9 @@ class Include_model extends CI_Model{
       $query = $this->db->get();
       $added_sensor = array();
       foreach ($query->result() as $sensor) {
-        if($sensor->sensor_type === '0')
-          $type = 'temperature';
-        else if($sensor->sensor_type === '1')
-          $type = 'humidity';
-        else if($sensor->sensor_type === '2')
-          $type = 'co2';
-        else if($sensor->sensor_type === '3')
-          $type = 'door';
-        else if($sensor->sensor_type === '4')
-          $type = 'airCleaner';
-        else if($sensor->sensor_type === '5')
-          $type = 'warningLight';
-
         $added_sensor['sensor_nid'] = $sensor->sensor_nid;
         $added_sensor['sensor_id'] = $sensor->sensor_id;
-        $added_sensor['sensor_type'] = $type;
+        $added_sensor['sensor_type'] = $sensor->sensor_type;
 
         $condition2 = "data_sid =" . "'" . $data['sid'] . "' and data_nid=" . "'" . $data['nid'] . "'";
         $this->db->select('*');
