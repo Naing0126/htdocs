@@ -96,10 +96,18 @@
       <div class="modal-body">
         Directory에 추가하고자 하는 Sensor를 선택하세요
         <br>
+        <?php
+        if(count($nodes)>0){
+          ?>
         <?php $included_sensors['#'] = 'Select Sensor Node first'; ?>
         <label for="node">Node: </label><?php echo form_dropdown('node_id', $nodes, '#', 'id="node" class="form-control"'); ?>
         <label for="sensor">Sensor: </label><?php echo form_dropdown('sensor_id', $included_sensors, '#', 'id="included_sensors" class="form-control"'); ?>
         <input type="hidden" id="did" name="did" value="<?=$did?>">
+      <?php
+    }else{
+      echo "Register Node first";
+    }
+      ?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
