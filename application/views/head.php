@@ -34,40 +34,48 @@
 
     </head>
 
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-main navbar-fixed-top">
-            <div class="container">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header ">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-main navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header ">
+                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                <a class="navbar-brand " href="#page-top">JNThings</a>
 
-                    <a class="navbar-brand " href="#page-top">JNThings</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right navbar-main">
-                        <li>
-                            <a class="page-scroll" href="<?php echo site_url('dashboard/directory_list');?>" target="board"> Directory</a>
-                        </li>
-                        <li>
-                            <a class="page-scroll" href="<?php echo site_url('dashboard/dashboard_list');?>" target="board"> Dashboard</a>
-                        </li>
-                        <li>
-                            <a class="trigger" href="<?php echo site_url('dashboard/trigger_list');?>" target="board" >Trigger</a>
-                        </li>
-                        <li>
-                            <a class="page-scroll" href="<?php echo site_url('dashboard/sensor_list');?>" target="board"> Sensors </a>
-                        </li>
-                         <li>
-                           <div class="userinfo">Hello <span class="user_name"><?php echo $user_name; ?></span> !</div>
-                        </li>
-                       <li>
-                            <a class="logout" href="dashboard/logout">Logout</a>
-                        </li>
-
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
             </div>
-            <!-- /.container-fluid -->
-        </nav>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="page-scroll" href="<?php echo site_url('dashboard/directory_list');?>" target="board"> Directory</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="<?php echo site_url('dashboard/dashboard_list');?>" target="board"> Dashboard</a>
+                    </li>
+                    <li>
+                        <a class="trigger" href="<?php echo site_url('dashboard/trigger_list');?>" target="board" >Trigger</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="<?php echo site_url('dashboard/sensor_list');?>" target="board"> Sensors </a>
+                    </li>
+                    <li>
+                     <div class="userinfo">Hello <span class="user_name"><?php echo $user_name; ?></span> !</div>
+                 </li>
+                 <li>
+                    <a class="logout" href="dashboard/logout">Logout</a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>

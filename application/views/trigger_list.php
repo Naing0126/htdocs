@@ -172,7 +172,7 @@
       }
 
       ?>
-      <button class="open-updateTriggerModal btn trigger btn-default btn-md"  data-tid="<?=$entry->tid?>" data-contents="<?=$contents?>"data-toggle="modal" data-target="#UpdateTriggerModal" id="trigger-<?=$entry->tid?>">
+      <button class="open-updateTriggerModal btn trigger btn-default btn-md btn-block col-sm-6"  data-tid="<?=$entry->tid?>" data-contents="<?=$contents?>"data-toggle="modal" data-target="#UpdateTriggerModal" id="trigger-<?=$entry->tid?>">
         <div class="" >
           <span class="condition">sensor : <?=$entry->c_sid?>, value : <?=$entry->c_value?> <?=$c_op?>  때, </span>
           <span class="<?=$type?>-action">
