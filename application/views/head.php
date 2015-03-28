@@ -66,7 +66,7 @@
                      <div class="userinfo">Hello <span class="user_name"><?php echo $user_name; ?></span> !</div>
                  </li>
                  <li>
-                    <a class="logout" href="dashboard/logout">Logout</a>
+                    <a class="logout" href="<?php echo site_url('dashboard/logout');?>">Logout</a>
                 </li>
 
             </ul>
