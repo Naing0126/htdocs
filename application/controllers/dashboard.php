@@ -33,6 +33,19 @@ class Dashboard extends CI_Controller {
     $this->load->view('footer');
   }
 
+  function mindex($name,$uid){
+    $data = array(
+      'user_name' => $name,
+      'uid' => $uid
+      );
+
+    $this->session->set_userdata($data);
+
+    $this->load->view('head',$data);
+    $this->load->view('frame',$data);
+    $this->load->view('footer');
+  }
+
   function directory_list(){
     $uid = $this->session->userdata('uid');
     $directories = $this->directory_model->gets($uid);
