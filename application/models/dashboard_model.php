@@ -205,6 +205,8 @@ public function get_included_sensors($uid){
      $this->db->select('*');
      $this->db->where('data_sid',$v->sensor_id);
      $this->db->from('data');
+     $this->db->order_by('data_id', 'DESC');
+     $this->db->limit(10);
      $temp2 = $this->db->get();
      if($temp2->num_rows() == 0){
          $data['data'][$cnt]= 'null';
