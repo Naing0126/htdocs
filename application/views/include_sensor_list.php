@@ -170,6 +170,7 @@ $base_url = site_url('');
          for($j = 0;$j<count($groups[$type_name]);$j++){
            $nid = $sensors['sensor_nid'][$groups[$type_name][$j]];
            $sid = $sensors['sensor_id'][$groups[$type_name][$j]];
+           $sname = $sensors['sensor_name'][$groups[$type_name][$j]];
            ?>
            <script>$('#<?=$type_name?>-bundle').css('height','+=130px');</script>
 
@@ -179,7 +180,7 @@ $base_url = site_url('');
                 <button type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$type_name?>','<?=$did?>','<?=$sid?>','<?=$nid?>')">
                   <span class="glyphicon glyphicon-minus-sign"></span>
                 </button>
-                <div class="name">{{sensors.info.sensor_id[sensors.index['<?=$sid?>']['<?=$nid?>']]}}</div>
+                <div class="name">{{sensors.info.sensor_name[sensors.index['<?=$sid?>']['<?=$nid?>']]}} ({{sensors.info.sensor_id[sensors.index['<?=$sid?>']['<?=$nid?>']]}})</div>
               </div>
               <div class="sensor-content">
                 <div class="value">
@@ -200,7 +201,8 @@ $base_url = site_url('');
                   }
                   ?>
                 </div>
-                <div class="node">{{sensors.info.sensor_nid[sensors.index['<?=$sid?>']['<?=$nid?>']]}}
+                <div class="time">
+                {{sensors.info.recent_data_time[sensors.index['<?=$sid?>']['<?=$nid?>']]}}
                 </div>
               </div><!-- /sensor-content -->
             </div><!-- /sensor-item-content -->

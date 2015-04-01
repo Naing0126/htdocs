@@ -8,7 +8,7 @@ class Sensor_model extends CI_Model{
    return $this->db->get_where('sensor', array('sensor_gid'=>$gid))->result();
  }
  function get_included_sensors($nid){
-  $this->db->select('sensor_id, sensor_type');
+  $this->db->select('sensor_id, sensor_type, sensor_name');
   $this->db->from('sensor');
   if(!is_null($nid)){
     $this->db->where('sensor_nid',$nid);
@@ -17,7 +17,7 @@ class Sensor_model extends CI_Model{
   $included_sensors = array();
   foreach ($query->result() as $sensor) {
 
-    $contents = $sensor->sensor_id . " , " . $sensor->sensor_type;
+    $contents = $sensor->sensor_id . " , " . $sensor->sensor_type . " , " . $sensor->sensor_name;
     $included_sensors[$sensor->sensor_id] = $contents;
   }
   return $included_sensors;
@@ -39,6 +39,7 @@ function get_included_sensor_list($nodes){
         $contents = $sensor->sensor_id . " , " . $sensor->sensor_type;
         $sensor_list[$nid]['type'][] = $sensor->sensor_type;
         $sensor_list[$nid]['sid'][] = $sensor->sensor_id;
+         $sensor_list[$nid]['sname'][] = $sensor->sensor_name;
       }
     }
   }else{

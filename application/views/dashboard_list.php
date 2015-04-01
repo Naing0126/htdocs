@@ -117,16 +117,13 @@ $base_url = site_url('');
  <div id="main-stack" class="grid-stack" data-gs-width="12" align="center">
    <?php
    if(count($widgets['widget_id']) > 0){
-        $cnt = count($widgets['widget_id']);
-       ?>
-      <?=$cnt?>
-      <?
      foreach($widgets['widget_id'] as $k=>$v){
       $length = count($widgets['sensor_nid']) -1;
       $index = $length-$k;
       $widget_id = $widgets['widget_id'][$index];
       $sensor_nid = $widgets['sensor_nid'][$index];
       $sensor_id = $widgets['sensor_id'][$index];
+      $sensor_name = $widgets['sensor_id'][$index];
       $type = $widgets['sensor_type'][$index];
 
       $widget_type =  $widgets['widget_type'][$index];
@@ -141,7 +138,7 @@ $base_url = site_url('');
               <button id="<?=$sensor_id?>" type="button" class="btn btn-default btn-xs btn-sensor-control" onclick="removeWidget('<?=$uid?>','<?=$widget_id?>')">
                 <span class="glyphicon glyphicon-minus-sign"></span>
               </button>
-              <div class="name"><?=$widget_type?> - {{widgets.info.sensor_id[widgets.index[<?=$widget_id?>]]}}</div>
+              <div class="name">{{widgets.info.sensor_name[widgets.index[<?=$widget_id?>]]}} ({{widgets.info.sensor_id[widgets.index[<?=$widget_id?>]]}})</div>
             </div>
             <div class="widget-content">
              <div class="type">

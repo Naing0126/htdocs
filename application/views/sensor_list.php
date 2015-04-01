@@ -93,6 +93,7 @@
           echo form_dropdown('type', $type_arr, '#', 'id="type"');
           ?>
           <input type="text" id="new_sid" name="new_sid" value="" placeholder="Enter new sensor id">
+           <input type="text" id="new_sname" name="new_sname" value="" placeholder="Enter new sensor name">
 
         </div>
       </div>
@@ -124,8 +125,9 @@
           for($i = 0;$i<count($sensor_list[$entry]['type']);$i++){
             $type = $sensor_list[$entry]['type'][$i];
             $sid = $sensor_list[$entry]['sid'][$i];
+            $sname = $sensor_list[$entry]['sname'][$i];
             ?>
-            <li><h5><?=$sid?>, <?=$type?></h5></li>
+            <li><h5><?=$sid?>, <?=$type?>, <?=$sname?></h5></li>
             <?php
           }}
           ?>
@@ -187,6 +189,7 @@ function addSensor(){
 
   var info = { 'sensor_nid' : $('#node').val(),
   'sensor_id' : $('#new_sid').val(),
+  'sensor_name' : $('#new_sname').val(),
   'sensor_type' : $('#type').val()
 };
 

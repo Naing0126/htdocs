@@ -5,9 +5,9 @@ class Dashboard_model extends CI_Model{
   }
 
   public function gets($uid){
-   $this->db->select('widget_id,widget_type,sensor.sensor_id as sid,sensor.sensor_nid as nid, sensor_type');
+   $this->db->select('widget_id,widget_type,sensor.sensor_id as sid,sensor.sensor_nid as nid, sensor_name, sensor_type');
    $this->db->from('sensor');
-   $this->db->join('dashboard','dashboard.sensor_id = sensor.sensor_id and dashboard.sensor_nid = sensor.sensor_nid');
+   $this->db->join('dashboard','dashboard.sensor_id = sensor.sensor_id');
    $this->db->where('dashboard.dashboard_id',$uid);
    $query = $this->db->get();
    if($query->num_rows() > 0){
@@ -16,6 +16,7 @@ class Dashboard_model extends CI_Model{
       $data['widget_id'][] = $v->widget_id;
       $data['sensor_nid'][] = $v->nid;
       $data['sensor_id'][] = $v->sid;
+      $data['sensor_name'][] = $v->sensor_name;
       $data['sensor_type'][] = $v->sensor_type;
     }
     return $data;
@@ -188,6 +189,7 @@ public function get_included_sensors($uid){
      $data['info']['sensor_id'][]= $v->sensor_id;
      $data['info']['sensor_type'][]= $v->sensor_type;
      $data['info']['sensor_nid'][]= $v->sensor_nid;
+     $data['info']['sensor_name'][]= $v->sensor_name;
 
      $this->db->select('*');
      $this->db->where('data_sid',$v->sensor_id);

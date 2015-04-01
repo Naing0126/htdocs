@@ -5,7 +5,7 @@ class Include_model extends CI_Model{
   }
 
   public function gets($did){
-    $this->db->select('sensor_id,sensor_nid, sensor_type');
+    $this->db->select('sensor_id,sensor_nid, sensor_name, sensor_type');
     $this->db->from('sensor');
     $this->db->join('include','include.sid = sensor.sensor_id and include.nid = sensor.sensor_nid');
     $this->db->where('include.did',$did);
@@ -14,6 +14,7 @@ class Include_model extends CI_Model{
       foreach($query->result() as $v){
         $data['sensor_nid'][] = $v->sensor_nid;
         $data['sensor_id'][] = $v->sensor_id;
+        $data['sensor_name'][] = $v->sensor_name;
         $data['sensor_type'][] = $v->sensor_type;
       }
       return $data;
@@ -109,6 +110,7 @@ public function get_included_sensors($did){
      $data['info']['sensor_id'][]= $v->sensor_id;
      $data['info']['sensor_type'][]= $v->sensor_type;
      $data['info']['sensor_nid'][]= $v->sensor_nid;
+     $data['info']['sensor_name'][]= $v->sensor_name;
 
      $this->db->select('*');
      $this->db->where('data_sid',$v->sid);
@@ -121,6 +123,7 @@ public function get_included_sensors($did){
      }
      foreach($temp->result() as $t){
       $data['info']['recent_data'][]= $t->data_value;
+      $data['info']['recent_data_time'][]= $t->data_stime;
     }
 
     $data['index'][$v->sid][$v->nid] = $cnt;

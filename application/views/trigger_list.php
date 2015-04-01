@@ -164,17 +164,23 @@
         $type = 'action';
       }
 
-      $temp = '[before] sensor : '.$entry->c_sid . ', value : ' . $entry->c_value . ' ' . $c_op . ' 때,';
+      if($entry->a_op==='0'){
+        $a_op = 'off';
+      }else if($entry->a_op==='1'){
+        $a_op = 'on';
+      }
+
+      $temp = '[before] sensor : '.$entry->c_sname.'('.$entry->c_sid.')' . ', value : ' . $entry->c_value . ' ' . $c_op . ' 때,';
       if($entry->action_type==='0'){
         $contents = $temp . ' / message : ' . $entry->a_message;
       }else if($entry->action_type==='1'){
-        $contents = $temp . 'sensor : ' . $entry->a_sid . ', op : ' . $entry->a_op;
+        $contents = $temp . 'sensor : ' . $entry->a_sname.'('.$entry->a_sid .') , op : ' . $a_op;
       }
 
       ?>
       <button class="open-updateTriggerModal btn trigger btn-default btn-md btn-block col-sm-6"  data-tid="<?=$entry->tid?>" data-contents="<?=$contents?>"data-toggle="modal" data-target="#UpdateTriggerModal" id="trigger-<?=$entry->tid?>">
         <div class="" >
-          <span class="condition">sensor : <?=$entry->c_sid?>, value : <?=$entry->c_value?> <?=$c_op?>  때, </span>
+          <span class="condition">sensor : <?=$entry->c_sname?> (<?=$entry->c_sid?>), value : <?=$entry->c_value?> <?=$c_op?>  때, </span>
           <span class="<?=$type?>-action">
             <?php
             if($entry->action_type=='0'){
@@ -183,7 +189,7 @@
               <?php
             }else if($entry->action_type=='1'){
               ?>
-              sensor : <?=$entry->a_sid?>, op : <?=$entry->a_op?>
+              sensor : <?=$entry->a_sname?>(<?=$entry->a_sid?>), op : <?=$a_op?>
               <?php
             }
             ?>
