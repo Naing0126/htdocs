@@ -117,6 +117,7 @@ $base_url = site_url('');
  <div id="main-stack" class="grid-stack" data-gs-width="12" align="center">
    <?php
    if(count($widgets['widget_id']) > 0){
+        $cnt = count($widgets['widget_id']);
        ?>
       <?=$cnt?>
       <?
