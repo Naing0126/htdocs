@@ -117,6 +117,9 @@ $base_url = site_url('');
  <div id="main-stack" class="grid-stack" data-gs-width="12" align="center">
    <?php
    if(count($widgets['widget_id']) > 0){
+       ?>
+      <?=$cnt?>
+      <?
      foreach($widgets['widget_id'] as $k=>$v){
       $length = count($widgets['sensor_nid']) -1;
       $index = $length-$k;
