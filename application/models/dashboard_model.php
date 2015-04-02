@@ -7,7 +7,7 @@ class Dashboard_model extends CI_Model{
   public function gets($uid){
    $this->db->select('widget_id,widget_type,sensor.sensor_id as sid,sensor.sensor_nid as nid, sensor_name, sensor_type');
    $this->db->from('sensor');
-   $this->db->join('dashboard','dashboard.sensor_id = sensor.sensor_id');
+    $this->db->join('dashboard',' dashboard.sensor_id = sensor.sensor_id and dashboard.sensor_nid = sensor.sensor_nid');
    $this->db->where('dashboard.dashboard_id',$uid);
    $query = $this->db->get();
    if($query->num_rows() > 0){
