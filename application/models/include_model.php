@@ -120,6 +120,7 @@ public function get_included_sensors($did){
      $temp = $this->db->get();
      if($temp->num_rows() == 0){
        $data['info']['recent_data'][]= 'null';
+       $data['info']['recent_data_time'][]= 'null';
      }
      foreach($temp->result() as $t){
       $data['info']['recent_data'][]= $t->data_value;
