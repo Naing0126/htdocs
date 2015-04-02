@@ -227,7 +227,7 @@ public function get_included_sensors($uid){
         $data['info']['recent_data_time'][]= 'more than 6 hours ago';
       }
       else{
-        $data['info']['recent_data_time'][]= timespan($t->data_stime,time()) . ' ago';
+        $data['info']['recent_data_time'][]= $t->data_stime.'-'.time().timespan($t->data_stime,time()) . ' ago';
       }
     }
 
