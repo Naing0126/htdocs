@@ -2,6 +2,7 @@
 class Dashboard_model extends CI_Model{
   function  __construct(){
     parent::__construct();
+        $this->load->helper('date');
   }
 
   public function gets($uid){
@@ -192,7 +193,7 @@ function delete_widget($data) {
 }
 
 public function get_included_sensors($uid){
-  $this->load->helper('date');
+
   $this->db->select('*');
   $this->db->from('dashboard');
   $this->db->join('sensor','sensor.sensor_id = dashboard.sensor_id and sensor.sensor_nid = dashboard.sensor_nid');
