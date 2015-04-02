@@ -120,6 +120,13 @@ function update_widget($data){
      }
      foreach($temp->result() as $t){
        $updated_widget['recent_data']= $t->data_value;
+      $hours = (time()-$t->data_stime) / (60*60);
+      if($hours>6){
+        $updated_widget['recent_data_time'][]= 'more than 6 hours ago';
+      }
+      else{
+        $updated_widget['recent_data_time'][]= timespan($t->data_stime,time()) . ' ago';
+      }
     }
     }
     return $updated_widget;

@@ -321,10 +321,9 @@ function connectSensor(){
                   var sensor_type = updated_widget.sensor_type;
                   document.getElementById('name'+widget_id).innerHTML = type + " - " +name;
                   if(type==='sensor'){
-                    var content = "<div class='type'>"+sensor_type+"</div><div class='value'>"+updated_widget.recent_data+"</div><div class='update'>"+updated_widget.sensor_nid+"</div>";
+                    var content = "<div class='type'>"+sensor_type+"</div><div class='value'>"+updated_widget.recent_data+"</div><div class='update'>"+updated_widget.recent_data_time+"</div>";
                     document.getElementById('sensor_content'+widget_id).innerHTML = content;
                   }else if(type==='chart'){
-
                     document.getElementById('connect_sensor'+widget_id).innerHTML = '';
                     var testData = {
                       labels : [],
