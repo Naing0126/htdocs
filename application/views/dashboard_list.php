@@ -163,7 +163,7 @@ $base_url = site_url('');
               ?>
             </div>
             <div class="node">
-              {{widgets.info.sensor_nid[widgets.index[<?=$widget_id?>]]}}
+              {{widgets.info.recent_data_time[widgets.index[<?=$widget_id?>]]}}
             </div>
           </div><!-- /sensor-content -->
         </div><!-- /sensor-item-content -->

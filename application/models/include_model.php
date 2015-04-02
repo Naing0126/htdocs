@@ -123,7 +123,13 @@ public function get_included_sensors($did){
      }
      foreach($temp->result() as $t){
       $data['info']['recent_data'][]= $t->data_value;
-      $data['info']['recent_data_time'][]= $t->data_stime;
+       $hours = (time()-$t->data_stime) / (60*60);
+      if($hours>6){
+        $data['info']['recent_data_time'][]= 'more than 6 hours ago';
+      }
+      else{
+        $data['info']['recent_data_time'][]= timespan($t->data_stime,time()) . ' ago';
+      }
     }
 
     $data['index'][$v->sid][$v->nid] = $cnt;

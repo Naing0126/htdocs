@@ -7,7 +7,7 @@ class Dashboard_model extends CI_Model{
   public function gets($uid){
    $this->db->select('widget_id,widget_type,sensor.sensor_id as sid,sensor.sensor_nid as nid, sensor_name, sensor_type');
    $this->db->from('sensor');
-    $this->db->join('dashboard',' dashboard.sensor_id = sensor.sensor_id and dashboard.sensor_nid = sensor.sensor_nid');
+   $this->db->join('dashboard',' dashboard.sensor_id = sensor.sensor_id and dashboard.sensor_nid = sensor.sensor_nid');
    $this->db->where('dashboard.dashboard_id',$uid);
    $query = $this->db->get();
    if($query->num_rows() > 0){
@@ -177,6 +177,7 @@ function delete_widget($data) {
 }
 
 public function get_included_sensors($uid){
+  $this->load->helper('date');
  $this->db->select('*');
  $this->db->from('dashboard');
  $this->db->join('sensor','sensor.sensor_id = dashboard.sensor_id and sensor.sensor_nid = dashboard.sensor_nid');
@@ -202,6 +203,13 @@ public function get_included_sensors($uid){
      }
      foreach($temp->result() as $t){
       $data['info']['recent_data'][]= $t->data_value;
+      $hours = (time()-$t->data_stime) / (60*60);
+      if($hours>6){
+        $data['info']['recent_data_time'][]= 'more than 6 hours ago';
+      }
+      else{
+        $data['info']['recent_data_time'][]= timespan($t->data_stime,time()) . ' ago';
+      }
     }
 
      $this->db->select('*');
