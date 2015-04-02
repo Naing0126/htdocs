@@ -128,7 +128,7 @@ $base_url = site_url('');
 <body ng-app='angular' ng-controller='directoryCtrl' ng-init="init('<?=$did?>','<?=$base_url?>')" >
 
   <!-- load included sensors in directory -->
-  <div class="sensor-bundle-list" id="sensor-bundle-list" align="center">
+  <div class="sensor-bundle-list col-sm-12" id="sensor-bundle-list" align="center">
       <?php
     $type_cnt = array('temperature' =>'0' ,'humidity' =>'0','co2' => '0', 'door' => '0', 'airCleaner' => '0', 'warningLight' => '0' );
     $type_names = array('0'=>'temperature', '1'=>'humidity', '2'=>'co2', '3'=>'door', '4' =>'airCleaner', '5' => 'warningLight');
@@ -161,7 +161,7 @@ $base_url = site_url('');
       if($type_cnt[$type_name]<1)
         continue;
       ?>
-      <div id="<?=$type_name?>-bundle" class="sensor-bundle col-md-3 col-sm-3" align="center">
+      <div id="<?=$type_name?>-bundle" class="sensor-bundle col-md-3 col-sm-12" align="center">
         <div class="sensor-bundle-name" align="center">
           <?=$type_name?>
         </div>
