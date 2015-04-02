@@ -125,6 +125,7 @@ function update_widget($data){
         $updated_widget['data_value'][$i]=$query[$i]->data_value;
       }
       $updated_widget['recent_data']= $query[0]->data_value;
+     /*
       $hours = (time()-$query[0]->data_stime) / (60*60);
       if($hours>6){
         $updated_widget['recent_data_time'][]= 'more than 6 hours ago';
@@ -132,6 +133,8 @@ function update_widget($data){
       else{
         $updated_widget['recent_data_time'][]= timespan($query[0]->data_stime,time()) . ' ago';
       }
+      */
+      $updated_widget['recent_data_time'][]= timespan($query[0]->data_stime,time()) . ' ago';
     }
   }
   return $updated_widget;

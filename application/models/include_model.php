@@ -132,7 +132,7 @@ public function get_included_sensors($did){
         $data['info']['recent_data_time'][]= timespan($t->data_stime,time()) . ' ago';
       }
       */
-      $data['info']['recent_data_time'][]= $t->data_stime;
+      $data['info']['recent_data_time'][]= timespan($t->data_stime,time()) . ' ago';
     }
 
     $data['index'][$v->sid][$v->nid] = $cnt;
