@@ -81,8 +81,8 @@ function delete_include($data) {
 // Query to insert directory in database
    foreach($query->result() as $v){
     $sensor_type = $v->sensor_type;
-     $this->db->delete('include', $data);
-     if ($this->db->affected_rows() > 0) {
+    $this->db->delete('include', $data);
+    if ($this->db->affected_rows() > 0) {
       $condition = "did =" . "'" . $data['did'] ."' and sensor_type=" . "'" . $sensor_type . "'";
       $this->db->select('*');
       $this->db->from('include');
@@ -123,13 +123,16 @@ public function get_included_sensors($did){
      }
      foreach($temp->result() as $t){
       $data['info']['recent_data'][]= $t->data_value;
-       $hours = (time()-$t->data_stime) / (60*60);
+      /*
+      $hours = (time()-$t->data_stime) / (60*60);
       if($hours>6){
         $data['info']['recent_data_time'][]= 'more than 6 hours ago';
       }
       else{
         $data['info']['recent_data_time'][]= timespan($t->data_stime,time()) . ' ago';
       }
+      */
+      $data['info']['recent_data_time'][]= $t->data_stime;
     }
 
     $data['index'][$v->sid][$v->nid] = $cnt;
