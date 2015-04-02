@@ -2,7 +2,7 @@
 class Dashboard_model extends CI_Model{
   function  __construct(){
     parent::__construct();
-        $this->load->helper('date');
+       $this->load->helper('date');
   }
 
   public function gets($uid){
@@ -119,6 +119,7 @@ function update_widget($data){
       $temp = $this->db->get();
       if($temp->num_rows() == 0){
        $updated_widget['recent_data']= 'null';
+       $updated_widget['recent_data_time']= 'null';
      }else{
       $query = $temp->result();
       for($i=0;$i<count($query);$i++){
@@ -216,6 +217,8 @@ public function get_included_sensors($uid){
      $temp = $this->db->get();
      if($temp->num_rows() == 0){
        $data['info']['recent_data'][]= 'null';
+      $data['info']['recent_data_time'][]= 'null';
+
      }
      foreach($temp->result() as $t){
       $data['info']['recent_data'][]= $t->data_value;
