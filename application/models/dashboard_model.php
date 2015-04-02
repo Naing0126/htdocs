@@ -23,30 +23,30 @@ class Dashboard_model extends CI_Model{
   }
 }
 
-  public function getWidgetsSid($uid){
-   $this->db->select('sensor_id');
-   $this->db->from('dashboard');
-   $this->db->where('dashboard.dashboard_id',$uid);
-   $query = $this->db->get();
-   if($query->num_rows() > 0){
-    foreach($query->result() as $v){
-      $data['sensor_id'][] = $v->sensor_id;
-    }
-    return $data;
+public function getWidgetsSid($uid){
+ $this->db->select('sensor_id');
+ $this->db->from('dashboard');
+ $this->db->where('dashboard.dashboard_id',$uid);
+ $query = $this->db->get();
+ if($query->num_rows() > 0){
+  foreach($query->result() as $v){
+    $data['sensor_id'][] = $v->sensor_id;
   }
+  return $data;
+}
 }
 
- public function getWidgetsNid($uid){
-   $this->db->select('sensor_id,sensor_nid');
-   $this->db->from('dashboard');
-   $this->db->where('dashboard.dashboard_id',$uid);
-   $query = $this->db->get();
-   if($query->num_rows() > 0){
-    foreach($query->result() as $v){
-      $data['sensor_nid'][] = $v->sensor_nid;
-    }
-    return $data;
+public function getWidgetsNid($uid){
+ $this->db->select('sensor_id,sensor_nid');
+ $this->db->from('dashboard');
+ $this->db->where('dashboard.dashboard_id',$uid);
+ $query = $this->db->get();
+ if($query->num_rows() > 0){
+  foreach($query->result() as $v){
+    $data['sensor_nid'][] = $v->sensor_nid;
   }
+  return $data;
+}
 }
 
 public function getName($did){
@@ -97,40 +97,45 @@ function update_widget($data){
       $updated_widget['widget_type'] = $widget->widget_type;
       $updated_widget['sensor_id'] = $widget->sensor_id;
       $updated_widget['sensor_nid'] = $widget->sensor_nid;
+      $updated_widget['sensor_name'] = $widget->sensor_name;
       $updated_widget['sensor_type'] = $widget->sensor_type;
 
       $this->db->select(' * ');
       $this->db->from('data');
       $this->db->where('data_sid',$widget->sensor_id);
       $query = $this->db->get()->result();
-     $updated_widget['cnt'] = count($query);
-     for($i=0;$i<count($query);$i++){
-      $updated_widget['data_stime'][$i]=$query[$i]->data_stime;
-      $updated_widget['data_value'][$i]=$query[$i]->data_value;
-     }
+      $updated_widget['cnt'] = count($query);
+      for($i=0;$i<count($query);$i++){
+        $updated_widget['data_stime'][$i]=$query[$i]->data_stime;
+        $updated_widget['data_value'][$i]=$query[$i]->data_value;
+      }
 
       $this->db->select('*');
-     $this->db->where('data_sid',$widget->sensor_id);
-     $this->db->from('data');
-     $this->db->order_by('data_id', 'DESC');
-     $this->db->limit(1);
-     $temp = $this->db->get();
-     if($temp->num_rows() == 0){
-         $updated_widget['recent_data']= 'null';
-     }
-     foreach($temp->result() as $t){
-       $updated_widget['recent_data']= $t->data_value;
-      $hours = (time()-$t->data_stime) / (60*60);
+      $this->db->where('data_sid',$widget->sensor_id);
+      $this->db->from('data');
+      $this->db->order_by('data_id', 'DESC');
+      $this->db->limit(10);
+      $temp = $this->db->get();
+      if($temp->num_rows() == 0){
+       $updated_widget['recent_data']= 'null';
+     }else{
+      $query = $temp->result();
+      for($i=0;$i<count($query);$i++){
+        $updated_widget['data_stime'][$i]=$query[$i]->data_stime;
+        $updated_widget['data_value'][$i]=$query[$i]->data_value;
+      }
+      $updated_widget['recent_data']= $query[0]->data_value;
+      $hours = (time()-$query[0]->data_stime) / (60*60);
       if($hours>6){
         $updated_widget['recent_data_time'][]= 'more than 6 hours ago';
       }
       else{
-        $updated_widget['recent_data_time'][]= timespan($t->data_stime,time()) . ' ago';
+        $updated_widget['recent_data_time'][]= timespan($query[0]->data_stime,time()) . ' ago';
       }
     }
-    }
-    return $updated_widget;
   }
+  return $updated_widget;
+}
 }
 }
 
@@ -185,12 +190,12 @@ function delete_widget($data) {
 
 public function get_included_sensors($uid){
   $this->load->helper('date');
- $this->db->select('*');
- $this->db->from('dashboard');
- $this->db->join('sensor','sensor.sensor_id = dashboard.sensor_id and sensor.sensor_nid = dashboard.sensor_nid');
- $this->db->where('dashboard_id',$uid);
- $query = $this->db->get();
- if($query->num_rows() > 0){
+  $this->db->select('*');
+  $this->db->from('dashboard');
+  $this->db->join('sensor','sensor.sensor_id = dashboard.sensor_id and sensor.sensor_nid = dashboard.sensor_nid');
+  $this->db->where('dashboard_id',$uid);
+  $query = $this->db->get();
+  if($query->num_rows() > 0){
    $cnt = 0;
    foreach($query->result() as $v){
 
@@ -206,7 +211,7 @@ public function get_included_sensors($uid){
      $this->db->limit(1);
      $temp = $this->db->get();
      if($temp->num_rows() == 0){
-         $data['info']['recent_data'][]= 'null';
+       $data['info']['recent_data'][]= 'null';
      }
      foreach($temp->result() as $t){
       $data['info']['recent_data'][]= $t->data_value;
@@ -219,25 +224,25 @@ public function get_included_sensors($uid){
       }
     }
 
-     $this->db->select('*');
-     $this->db->where('data_sid',$v->sensor_id);
-     $this->db->from('data');
-     $this->db->order_by('data_id', 'DESC');
-     $this->db->limit(10);
-     $temp2 = $this->db->get();
-     if($temp2->num_rows() == 0){
-         $data['data'][$cnt]= 'null';
-     }
-     foreach($temp2->result() as $t){
-      $data['data'][$cnt]['data_stime'][]= $t->data_stime;
-      $data['data'][$cnt]['data_value'][]= $t->data_value;
-    }
-
-    $data['index'][$v->widget_id] = $cnt;
-
-    $cnt++;
+    $this->db->select('*');
+    $this->db->where('data_sid',$v->sensor_id);
+    $this->db->from('data');
+    $this->db->order_by('data_id', 'DESC');
+    $this->db->limit(10);
+    $temp2 = $this->db->get();
+    if($temp2->num_rows() == 0){
+     $data['data'][$cnt]= 'null';
+   }
+   foreach($temp2->result() as $t){
+    $data['data'][$cnt]['data_stime'][]= $t->data_stime;
+    $data['data'][$cnt]['data_value'][]= $t->data_value;
   }
-  return $data;
+
+  $data['index'][$v->widget_id] = $cnt;
+
+  $cnt++;
+}
+return $data;
 }
 }
 
