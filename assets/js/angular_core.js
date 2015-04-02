@@ -5,7 +5,7 @@ app.controller('directoryCtrl',function($scope,$http,$interval){
      load_included_sensors_in_directory(did,url);
      $interval(function(){
         load_included_sensors_in_directory(did,url);
-    },300);
+    },5000);
  }
 
  function load_included_sensors_in_directory(did,url){
@@ -22,7 +22,7 @@ app.controller('dashboardCtrl',function($scope,$http,$interval){
         load_included_sensors_in_dashboard(uid,url);
         $interval(function(){
            load_included_sensors_in_dashboard(uid,url);
-       },300);
+       },5000);
     }
 
     function load_included_sensors_in_dashboard(uid,url){
