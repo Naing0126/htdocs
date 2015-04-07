@@ -101,7 +101,6 @@ function update_widget($data){
       $updated_widget['sensor_name'] = $widget->sensor_name;
       $updated_widget['sensor_type'] = $widget->sensor_type;
 
-
        $condition = "data_sid =" . "'" . $widget->sensor_id . "' and data_nid=" . "'" .  $widget->sensor_nid . "'";
       $this->db->select(' * ');
       $this->db->from('data');
@@ -201,8 +200,9 @@ public function get_included_sensors($uid){
      $data['info']['sensor_nid'][]= $v->sensor_nid;
      $data['info']['sensor_name'][]= $v->sensor_name;
 
+      $condition = "data_sid =" . "'" . $v->sensor_id . "' and data_nid=" . "'" .  $v->sensor_nid . "'";
      $this->db->select('*');
-     $this->db->where('data_sid',$v->sensor_id);
+     $this->db->where($condition);
      $this->db->from('data');
      $this->db->order_by('data_id', 'DESC');
      $this->db->limit(1);
@@ -223,14 +223,11 @@ public function get_included_sensors($uid){
         $data['info']['recent_data_time'][]= $t->data_stime.'-'.time().' '.timespan($t->data_stime,time()) . ' ago';
       }
       */
-      $format = 'DATE_RFC822';
-$time = time();
-
-    $data['info']['recent_data_time'][]= $t->data_stime.'-'.time().' '.timespan($t->data_stime,) . ' ago';
+    $data['info']['recent_data_time'][]= $t->data_stime . ' ago';
     }
 
     $this->db->select('*');
-    $this->db->where('data_sid',$v->sensor_id);
+    $this->db->where($condition);
     $this->db->from('data');
     $this->db->order_by('data_id', 'DESC');
     $this->db->limit(10);
