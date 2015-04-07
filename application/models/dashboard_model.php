@@ -101,19 +101,11 @@ function update_widget($data){
       $updated_widget['sensor_name'] = $widget->sensor_name;
       $updated_widget['sensor_type'] = $widget->sensor_type;
 
+
+       $condition = "data_sid =" . "'" . $widget->sensor_id . "' and data_nid=" . "'" .  $widget->sensor_nid . "'";
       $this->db->select(' * ');
       $this->db->from('data');
-      $this->db->where('data_sid',$widget->sensor_id);
-      $query = $this->db->get()->result();
-      $updated_widget['cnt'] = count($query);
-      for($i=0;$i<count($query);$i++){
-        $updated_widget['data_stime'][$i]=$query[$i]->data_stime;
-        $updated_widget['data_value'][$i]=$query[$i]->data_value;
-      }
-
-      $this->db->select('*');
-      $this->db->where('data_sid',$widget->sensor_id);
-      $this->db->from('data');
+      $this->db->where($condition);
       $this->db->order_by('data_id', 'DESC');
       $this->db->limit(10);
       $temp = $this->db->get();
@@ -222,6 +214,7 @@ public function get_included_sensors($uid){
      }
      foreach($temp->result() as $t){
       $data['info']['recent_data'][]= $t->data_value;
+      /*
       $hours = (time()-$t->data_stime) / (60*60);
       if($hours>6){
         $data['info']['recent_data_time'][]= 'more than 6 hours ago';
@@ -229,6 +222,11 @@ public function get_included_sensors($uid){
       else{
         $data['info']['recent_data_time'][]= $t->data_stime.'-'.time().' '.timespan($t->data_stime,time()) . ' ago';
       }
+      */
+      $format = 'DATE_RFC822';
+$time = time();
+
+    $data['info']['recent_data_time'][]= $t->data_stime.'-'.time().' '.timespan($t->data_stime,) . ' ago';
     }
 
     $this->db->select('*');
