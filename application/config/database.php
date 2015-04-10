@@ -3,11 +3,11 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'mysql:host=ja-cdbr-azure-west-a.cloudapp.net';
-$db['default']['username'] = 'b7f51aceb56551';
-$db['default']['password'] = '1eb37f2f';
-$db['default']['database'] = 'naingteAwFvNFAtW';
-$db['default']['dbdriver'] = 'pdo';
+$db['default']['hostname'] = 'y5j9qhlfv0.database.windows.net,1433';
+$db['default']['username'] = 'future@y5j9qhlfv0.database.windows.net';
+$db['default']['password'] = 'dkssud1!';
+$db['default']['database'] = 'Futuretek_db';
+$db['default']['dbdriver'] = 'sqlsrv';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
